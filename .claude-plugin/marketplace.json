@@ -1,0 +1,17 @@
+{
+  "name": "rewind-church",
+  "owner": { "name": "Rewind", "url": "https://rewind.church" },
+  "metadata": {
+    "description": "Official Rewind plugins for Claude — connect Claude to your church's own preaching corpus (read-only, verbatim citations).",
+    "version": "0.1.0"
+  },
+  "plugins": [
+    {
+      "name": "rewind",
+      "source": "./rewind",
+      "description": "Prep sermons, plan series, build study briefs, and search how your church has already preached a passage or theme — grounded only in your church's sermons, with verbatim citations. Read-only MCP.",
+      "version": "0.1.0",
+      "keywords": ["sermon", "preaching", "church", "bible", "mcp"]
+    }
+  ]
+}

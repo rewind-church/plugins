@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "rewind": {
+      "type": "http",
+      "url": "${REWIND_MCP_URL}",
+      "headers": {
+        "Authorization": "Bearer ${REWIND_MCP_TOKEN}"
+      }
+    }
+  }
+}
