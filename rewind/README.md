@@ -7,9 +7,9 @@ preacher's real words).
 
 This plugin bundles:
 
-- **The Rewind MCP connection** (`.mcp.json`) — six read-only corpus tools
-  (`corpus_search`, `scripture_coverage`, `corpus_qa`, `compare_treatments`,
-  `trace_theme`, `find_illustrations`) plus sermon resources.
+- **The Rewind MCP connection** (`.mcp.json`) — seven read-only corpus tools
+  (`corpus_search`, `scripture_coverage`, `get_sermon`, `corpus_qa`,
+  `compare_treatments`, `trace_theme`, `find_illustrations`) plus sermon resources.
 - **Skills** that turn the tools into weekly workflows: **Sermon prep**, **Corpus
   lookup**, **Study brief**, **Series planner**, **Illustration finder**. Claude
   activates these automatically from plain-language requests.

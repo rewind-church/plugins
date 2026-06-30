@@ -3,7 +3,7 @@
   "owner": { "name": "Rewind", "url": "https://rewind.church" },
   "metadata": {
     "description": "Official Rewind plugins for Claude — connect Claude to your church's own preaching corpus (read-only, verbatim citations).",
-    "version": "0.1.0"
+    "version": "0.2.0"
   },
   "plugins": [
     {

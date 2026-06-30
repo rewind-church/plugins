@@ -1,7 +1,7 @@
 ---
 name: Study brief
 description: Use when a pastor wants a study brief or exegetical starting point for a passage, grounded in how their own church has treated it — "build me a brief on <passage>", "study notes for <text>", "what do I need to know to preach <passage>", "pull together background on <text>". Leads with the church's own corpus, then scripture, then general study.
-version: 0.1.0
+version: 0.2.0
 ---
 
 # Study brief — a passage brief led by your church's corpus
@@ -13,9 +13,10 @@ Assemble a working study brief for a passage. The distinctive value is that it
 ## Build order (corpus first)
 
 1. **The church's own treatments.** `corpus_qa` ("How has our church preached
-   <passage>?") and `corpus_search` for the verbatim moments. Pull a sermon's
-   `rewind://sermon/{id}/overview` for thesis/key-points/outline when one is on point.
-   Cite each (title + date + speaker + timestamp).
+   <passage>?") and `corpus_search` for the verbatim moments. When a sermon is on
+   point, `get_sermon` (by its id) for the overview and/or full transcript — or the
+   `rewind://sermon/{id}/overview` resource if your client prefers. Cite each
+   (title + date + speaker + timestamp).
 2. **Scripture context.** The passage itself, its immediate context, and — via
    `scripture_coverage` — how this book sits in the church's overall preaching.
 3. **General study layer.** Only after the above, add standard background (genre,

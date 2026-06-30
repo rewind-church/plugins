@@ -1,7 +1,7 @@
 ---
 name: Corpus lookup
 description: Use when someone asks what their church has preached about a topic, passage, or theme — "have we preached on X", "what have we said about <topic>", "how did we handle <passage>", "compare how we preached A vs B", "how has our teaching on <theme> changed over time", "which books have we never preached". Answers ONLY from the church's own sermons, with verbatim citations.
-version: 0.1.0
+version: 0.2.0
 ---
 
 # Corpus lookup — what has this church actually preached?
@@ -22,9 +22,13 @@ server). Everything is **read-only and scoped to this church**, and every answer
   (date-ordered development).
 - **"Which Bible books / passages have we (never) preached?"** → `scripture_coverage`.
 - **"What illustrations have we used for <topic>?"** → `find_illustrations`.
+- **"Pull up / read that whole sermon"** → `get_sermon` (one sermon by id: overview +
+  full verbatim transcript, optionally group guide + devotional).
 
-You can chain them: search to find the sermons, then read a resource
-(`rewind://sermon/{id}/overview` or `/transcript`) for depth.
+You can chain them: `corpus_search` or `scripture_coverage` to find the sermon and
+its id, then `get_sermon` to read it in full. (The same content is also available as
+resources — `rewind://sermon/{id}/overview` or `/transcript` — if your client prefers
+resource reads.)
 
 ## Rules
 
@@ -35,5 +39,6 @@ You can chain them: search to find the sermons, then read a resource
 - **Attribution intact.** Personal stories keep their teller; titles and names render
   exactly as returned.
 - **Metered tools cost the church a few cents** (`corpus_qa`, `compare_treatments`,
-  `trace_theme`, `find_illustrations`); `corpus_search` and `scripture_coverage` are
-  free. Prefer the free tools for exploration, the metered ones for the real answer.
+  `trace_theme`, `find_illustrations`); `corpus_search`, `scripture_coverage`, and
+  `get_sermon` are free. Prefer the free tools for exploration, the metered ones for
+  the real answer.
