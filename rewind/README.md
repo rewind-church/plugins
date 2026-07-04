@@ -7,9 +7,12 @@ preacher's real words).
 
 This plugin bundles:
 
-- **The Rewind MCP connection** (`.mcp.json`) — seven read-only corpus tools
-  (`corpus_search`, `scripture_coverage`, `get_sermon`, `corpus_qa`,
-  `compare_treatments`, `trace_theme`, `find_illustrations`) plus sermon resources.
+- **The Rewind MCP connection** (`.mcp.json`) — eight read-only corpus tools
+  (`corpus_search`, `scripture_coverage`, `get_sermon`, `list_recent_sermons`,
+  `corpus_qa`, `compare_treatments`, `trace_theme`, `find_illustrations`) plus
+  sermon resources. The search and synthesis tools accept optional filters —
+  speaker, scripture book/chapter, topic, content kind (weekend sermon vs class /
+  conference / midweek / special), and preached-date range.
 - **Skills** that turn the tools into weekly workflows: **Sermon prep**, **Corpus
   lookup**, **Study brief**, **Series planner**, **Illustration finder**. Claude
   activates these automatically from plain-language requests.
@@ -41,8 +44,10 @@ claude plugin install rewind@rewind-church
 ## What's it cost?
 
 The conversation runs on **your** Claude. Rewind only spends on the four *metered*
-tools (a few cents each, capped by your token's daily limit); `corpus_search` and
-`scripture_coverage` are free. See the in-app setup guide for the full breakdown.
+tools (`corpus_qa`, `compare_treatments`, `trace_theme`, `find_illustrations` — a
+few cents each, capped by your token's daily limit); `corpus_search`,
+`scripture_coverage`, `get_sermon`, and `list_recent_sermons` are free. See the
+in-app setup guide for the full breakdown.
 
 ## Read-only & scoped
 

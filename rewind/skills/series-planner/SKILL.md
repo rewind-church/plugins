@@ -1,7 +1,7 @@
 ---
 name: Series planner
 description: Use when a pastor is planning a sermon series or a season of preaching — "plan a series on <theme>", "what should we preach next quarter", "help me map a series", "we want to cover <book/topic> — how do we structure it". Plans coverage-aware, building on the church's history instead of repeating it.
-version: 0.1.0
+version: 0.2.0
 ---
 
 # Series planner — coverage-aware series planning
@@ -20,7 +20,11 @@ preached (Rewind MCP `rewind` server, read-only, cited).
    - `trace_theme` — for a thematic series, how the church's teaching on it has already
      developed, so the series advances the story rather than restarting it.
    - `corpus_qa` / `corpus_search` — specific prior treatments of the texts/topics
-     you're considering.
+     you're considering. Use `filters.contentKind: "sermon"` when the plan should
+     weigh only the weekend pulpit (classes/conferences are their own track), and
+     `fromDate`/`toDate` to bound "recent" ground.
+   - `list_recent_sermons` — the current run-up (newest first), so the series
+     lands coherently after what the congregation just heard.
 
 3. **Propose the series.** A week-by-week arc with, for each week:
    - the text/topic,

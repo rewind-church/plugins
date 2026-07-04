@@ -1,7 +1,7 @@
 ---
 name: Sermon prep
 description: Use when a pastor is preparing or planning a sermon on a passage, text, or topic — to ground the message in what their church has ALREADY preached (so it builds instead of repeats), surface relevant past illustrations, and check scripture coverage. Triggers on "help me prep this week", "I'm preaching on <passage/topic>", "what should I do with <text>", "prep a message on …".
-version: 0.1.0
+version: 0.2.0
 ---
 
 # Sermon prep — grounded in your church's own corpus
@@ -21,9 +21,12 @@ has already done.
 
 2. **Check what's already been preached (anti-repetition).** Call `corpus_qa`
    ("What has our church already preached about <topic/passage>?") and/or
-   `corpus_search` for verbatim hits. Summarize what's been said, **with citations
-   (sermon title + date + speaker + timestamp)**. Explicitly tell the pastor what
-   NOT to re-tread and where there's room to go deeper or differently.
+   `corpus_search` for verbatim hits — both take optional `filters` (`speaker`,
+   `book`/`chapter`, `topic`, `contentKind` for weekend-sermons-vs-classes,
+   `fromDate`/`toDate`) when the pastor scopes the question. Summarize what's been
+   said, **with citations (sermon title + date + speaker + timestamp)**. Explicitly
+   tell the pastor what NOT to re-tread and where there's room to go deeper or
+   differently.
 
 3. **Check scripture coverage.** For a passage, call `scripture_coverage` to see how
    often that book/chapter has been preached and by whom — and whether nearby texts
