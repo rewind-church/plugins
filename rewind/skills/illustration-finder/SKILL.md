@@ -1,7 +1,7 @@
 ---
 name: Illustration finder
 description: Use when a pastor wants illustrations, stories, or examples for a topic or passage from their church's own preaching — "find illustrations for <topic>", "have we told a story about <theme>", "I need an example for <passage>", "what stories have we used on <topic>". Returns past illustrations with attribution preserved verbatim.
-version: 0.1.0
+version: 0.2.0
 ---
 
 # Illustration finder
@@ -12,7 +12,8 @@ Surface illustrations and stories the church has already used, via the Rewind MC
 ## How to use
 
 1. Call `find_illustrations` with the topic or passage. Optionally narrow with filters
-   (speaker, book, date range).
+   (`speaker`, `book`/`chapter`, `topic`, `contentKind` — weekend `"sermon"` vs
+   `"class"`/`"conference"`/`"midweek"`/`"special"` — and `fromDate`/`toDate`).
 2. Present each result with **attribution preserved exactly** — the sermon, the
    timestamp, and **who told it**.
 3. If helpful, pull the surrounding context from `rewind://sermon/{id}/transcript` so
