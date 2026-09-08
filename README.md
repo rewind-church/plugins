@@ -30,9 +30,9 @@ preached about anxiety?"* — and Claude orchestrates the corpus tools for you.
 ### `rewind`
 The Rewind corpus plugin. Bundles:
 
-- **The Rewind MCP connection** — six read-only corpus tools (`corpus_search`,
+- **The Rewind MCP connection** — eight read-only corpus tools (`corpus_search`,
   `scripture_coverage`, `corpus_qa`, `compare_treatments`, `trace_theme`,
-  `find_illustrations`) plus sermon resources.
+  `find_illustrations`, `get_sermon`, `list_recent_sermons`) plus sermon resources.
 - **Skills** — _Sermon prep_, _Corpus lookup_, _Study brief_, _Series planner_,
   _Illustration finder_. Claude activates them from plain-language requests.
 - **Commands** — `/rewind-prep`, `/rewind-lookup`.
