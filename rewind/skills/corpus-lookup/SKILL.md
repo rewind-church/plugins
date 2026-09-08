@@ -1,7 +1,7 @@
 ---
 name: Corpus lookup
 description: Use when someone asks what their church has preached about a topic, passage, or theme — "have we preached on X", "what have we said about <topic>", "how did we handle <passage>", "compare how we preached A vs B", "how has our teaching on <theme> changed over time", "which books have we never preached", "what were our recent sermons". Answers ONLY from the church's own sermons, with verbatim citations.
-version: 0.3.0
+version: 0.4.0
 ---
 
 # Corpus lookup — what has this church actually preached?
@@ -25,12 +25,20 @@ server). Everything is **read-only and scoped to this church**, and every answer
 - **"What did we preach recently / last week?"** → `list_recent_sermons` (newest
   first by preached date — `corpus_search` ranks by RELEVANCE, not recency).
 - **"Pull up / read that whole sermon"** → `get_sermon` (one sermon by id: overview +
-  full verbatim transcript, optionally group guide + devotional).
+  full verbatim transcript, optionally group guide, devotional, or illustrations).
+- **"Which stories did this specific sermon use?"** → `get_sermon` with
+  `include: ["illustrations"]` (free), not the metered cross-sermon search.
 
 You can chain them: `corpus_search`, `scripture_coverage`, or `list_recent_sermons`
 to find the sermon and its id, then `get_sermon` to read it in full. (The same
 content is also available as resources — `rewind://sermon/{id}/overview` or
 `/transcript` — if your client prefers resource reads.)
+
+`get_sermon` returns `missing` plus `reasons`: `not_generated` means a requested
+generated part is unavailable; `not_analyzed` means illustrations have not been
+analyzed yet. An analyzed sermon with no stories returns an empty illustrations
+list instead. Report missing analysis honestly. If an illustration's timestamp
+or link is withheld after a transcript change, do not fabricate or validate it.
 
 ## Narrowing with filters
 

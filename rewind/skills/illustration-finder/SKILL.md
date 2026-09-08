@@ -1,23 +1,34 @@
 ---
 name: Illustration finder
 description: Use when a pastor wants illustrations, stories, or examples for a topic or passage from their church's own preaching — "find illustrations for <topic>", "have we told a story about <theme>", "I need an example for <passage>", "what stories have we used on <topic>". Returns past illustrations with attribution preserved verbatim.
-version: 0.2.0
+version: 0.3.0
 ---
 
 # Illustration finder
 
 Surface illustrations and stories the church has already used, via the Rewind MCP
-`find_illustrations` tool (`rewind` server). Read-only, scoped to this church.
+tools (`rewind` server). Read-only, scoped to this church.
 
 ## How to use
 
-1. Call `find_illustrations` with the topic or passage. Optionally narrow with filters
+1. For the stories in **one specific sermon**, get its id from `corpus_search`
+   or `list_recent_sermons`, then call `get_sermon` with
+   `{ "sermonId": "<id>", "include": ["illustrations"] }`. This lookup is free.
+   For a **topic or passage across sermons**, call the metered `find_illustrations`.
+   Optionally narrow with filters
    (`speaker`, `book`/`chapter`, `topic`, `contentKind` — weekend `"sermon"` vs
    `"class"`/`"conference"`/`"midweek"`/`"special"` — and `fromDate`/`toDate`).
 2. Present each result with **attribution preserved exactly** — the sermon, the
    timestamp, and **who told it**.
 3. If helpful, pull the surrounding context from `rewind://sermon/{id}/transcript` so
    the pastor can see how the illustration landed.
+
+For `get_sermon`, preserve the distinction between `reasons.illustrations =
+"not_analyzed"` (the sermon has not been analyzed for stories) and an empty
+`parts.illustrations` list (analyzed, none found). Never turn missing analysis
+into a claim that the sermon contains no stories. A null `atSeconds` or `url`
+means the timestamp/link is withheld after a transcript change; do not invent
+one or present it as checked. Preserve each returned excerpt and attribution.
 
 ## Rules (critical for illustrations)
 

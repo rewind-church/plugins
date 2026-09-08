@@ -43,6 +43,12 @@ claude plugin install rewind@rewind-church
 
 ## What's it cost?
 
+For stories from one specific sermon, request `get_sermon` with
+`include: ["illustrations"]`: a free read of its analyzed timeline, with
+verbatim excerpts and attribution. A missing analysis is reported separately
+from an analyzed sermon with no stories. Cross-sermon topic searches still use
+the metered `find_illustrations` tool.
+
 The conversation runs on **your** Claude. Rewind only spends on the four *metered*
 tools (`corpus_qa`, `compare_treatments`, `trace_theme`, `find_illustrations` — a
 few cents each, capped by your token's daily limit); `corpus_search`,
