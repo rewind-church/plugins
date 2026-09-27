@@ -31,14 +31,17 @@ If you keep notes on an item such as Message, or use different category names, c
 3. Review Planning Center's authorization screen and approve it only if you want Rewind to use that account's Services data.
 4. Return to Rewind. The card should show **Connected**.
 5. Under **Which services should Rewind read?**, select only the service types whose message plans you want to use. Selections save as you change them.
+6. Turn on **Read these plans automatically each night**. Choose at least one service type first.
 
 If the account or service list cannot be loaded, use the retry or reconnect control shown on the card. Rewind keeps your saved selections when loading fails.
 
 ## Confirm the first import
 
-**Automatic plan importing still requires Rewind to configure your church's primary notes source.** The Connections page's **Read these plans automatically each night** setting does not configure that source by itself. Do not treat a saved checkbox as confirmation that plans are being imported.
+Turning on automatic reading selects Planning Center as your primary notes source if you have not configured another one. If your church already reads notes from another source, Rewind keeps that source and explains the conflict; [contact Rewind](https://rewind.church/contact?topic=support) before changing it.
 
-Contact Rewind to confirm the source setup and first import before relying on automatic updates. Check that the correct message, date, Big Idea, points, questions, and next steps reached Rewind. Review the notes beside the sermon before publishing member-facing material; an ambiguous match needs a person to resolve it.
+After the next nightly import, check that the correct message, date, Big Idea, points, questions, and next steps reached Rewind. A saved setting confirms your choice; checking the imported notes confirms that your plan and categories are usable. Review the notes beside the sermon before publishing member-facing material; an ambiguous match needs a person to resolve it.
+
+To stop new automatic plan reads, turn off **Read these plans automatically each night**. Rewind keeps your selections, mapping, and already imported notes. Removing your last selected service type also turns automatic reading off. Reconnecting after a disconnect requires turning it on again.
 
 The current integration reads Planning Center plans. Publishing notes or creating plans in Planning Center from Rewind is not available yet.
 
