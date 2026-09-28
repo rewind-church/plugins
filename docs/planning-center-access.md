@@ -6,7 +6,7 @@ Read this before choosing **Connect Planning Center** in Rewind. See the [setup 
 
 Rewind requests Planning Center's **services** OAuth scope. It does not request the People scope. Planning Center's authorization screen and your account's Services permissions determine the grant you approve; a Services scope is not a promise that the token is technically restricted to your selected service types.
 
-Your selections in Rewind tell its plan importer which service types to read. Connecting does not automatically replace your church's existing notes source or authorize automatic podcast transcription.
+Your selections in Rewind tell its plan importer which service types to read. Turn on **Read these plans automatically each night** to allow those automatic reads; turn it off to stop new automatic plan reads. Connecting alone does not enable importing, replace your church's existing notes source, or authorize automatic podcast transcription. Imported notes remain when reading is stopped.
 
 ## What is read
 
