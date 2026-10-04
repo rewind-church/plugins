@@ -1,7 +1,7 @@
 ---
 name: Illustration finder
 description: Use when a pastor wants illustrations, stories, or examples for a topic or passage from their church's own preaching — "find illustrations for <topic>", "have we told a story about <theme>", "I need an example for <passage>", "what stories have we used on <topic>". Returns past illustrations with attribution preserved verbatim.
-version: 0.3.0
+version: 0.5.0
 ---
 
 # Illustration finder
@@ -32,12 +32,19 @@ one or present it as checked. Preserve each returned excerpt and attribution.
 
 ## Rules (critical for illustrations)
 
+- **Completed, empty and degraded differ.** A completed `state: "empty"`
+  means no matching illustrations in the selected candidate excerpts, not an
+  exhaustive search of the church's history. A `partial`, `failed` or `refused`
+  result has no completed findings to reuse: state its returned limitation,
+  rather than saying no illustrations exist. Preserve the returned search
+  scope and attribution; do not replace a withheld batch with guessed stories.
+
 - **Never rewrite a personal story in the first person** for the current preacher. If
   another preacher told "when my daughter was born…", it stays theirs — attributed,
   not adopted. Re-attributing someone's personal story to the current speaker is a
   trust violation.
 - **Attribution is verbatim** — render who told it exactly as returned.
-- **No fabrication.** If the church hasn't used an illustration on the topic, say so;
-  don't invent one and present it as something the church has used.
+- **No fabrication.** If no matching story appears in the selected excerpts,
+  say so; don't invent one or claim the church has never used one.
 - Offer your OWN fresh illustration ideas only when clearly labeled as new
   suggestions, separate from the cited corpus results.

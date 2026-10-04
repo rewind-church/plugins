@@ -1,7 +1,7 @@
 ---
 name: Corpus lookup
 description: Use when someone asks what their church has preached about a topic, passage, or theme — "have we preached on X", "what have we said about <topic>", "how did we handle <passage>", "compare how we preached A vs B", "how has our teaching on <theme> changed over time", "which books have we never preached", "what were our recent sermons". Answers ONLY from the church's own sermons, with verbatim citations.
-version: 0.4.0
+version: 0.5.0
 ---
 
 # Corpus lookup — what has this church actually preached?
@@ -11,6 +11,12 @@ server). Everything is **read-only and scoped to this church**, and every answer
 **grounded only in what was preached**, with verbatim citations.
 
 ## Pick the right tool
+
+- **"Open the teaching research workspace"** → `open_research_workspace` when
+  the server advertises it and the host supports MCP Apps. Pick `view` from
+  `archive`, `topics`, `illustrations`, `scripture` or `continuity`. This is a
+  presentation opener; it does not run research or generate an answer. In a
+  text-only client, continue with the tools below.
 
 - **A direct "what have we said about X?" question** → `corpus_qa` (synthesizes an
   answer across sermons with verbatim citations). Use this as the default.
@@ -60,8 +66,24 @@ or link is withheld after a transcript change, do not fabricate or validate it.
 
 - **Cite verbatim.** Sermon title + date + speaker + timestamp on every claim. A
   quote shown is a quote actually preached — never smooth or paraphrase it into one.
-- **No fabrication.** "We haven't preached on that yet" is a valid, useful answer.
-  Never invent teaching to fill a gap.
+- **Scope and provenance.** Keep the returned query/filters and limitations with
+  the result. Retrieval is bounded: no selected evidence does not prove the
+  church never taught a topic. Preserve sparse citation tokens, canonical links,
+  speaker and exact excerpts. Only `verified: true` means a quote was matched;
+  unverified wording remains unverified. Tokens restart across research runs:
+  retain the App's qualified reference (for example `R2:c1`) and original token
+  when reviewing a selected-source follow-up.
+- **No fabrication.** Say when the selected sources are insufficient. Never
+  invent teaching, Bible text or church doctrine to fill a gap.
+- **Continuity needs context.** Use `compare_treatments` with independent
+  speaker/date scopes or `trace_theme`, then `get_sermon` to inspect the exact
+  statements and their surrounding transcript. Distinguish possible
+  contradiction from compatible paraphrase/emphasis, audience context,
+  explicit correction/development, insufficient evidence and interpretation
+  ambiguity. Do not infer church doctrine from a speaker. Doctrine comparison
+  needs explicit church-approved versioned sources; Scripture interpretation
+  needs passage context and source attribution. Present a pastoral review aid,
+  never a verdict of biblical truth, an accusation or an enforcement decision.
 - **Attribution intact.** Personal stories keep their teller; titles and names render
   exactly as returned.
 - **Metered tools cost the church a few cents** (`corpus_qa`, `compare_treatments`,

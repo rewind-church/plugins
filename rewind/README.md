@@ -18,6 +18,36 @@ This plugin bundles:
   activates these automatically from plain-language requests.
 - **Commands**: `/rewind-prep`, `/rewind-lookup`.
 
+## Teaching research App
+
+On a server and host that support MCP Apps, ask to open the teaching research
+workspace. `open_research_workspace` accepts an optional initial `view`:
+`archive`, `topics`, `illustrations`, `scripture` or `continuity`.
+
+Search the archive or browse recent messages, read a full sermon and its
+available artifacts, request topic research, find attributed stories, explore
+recorded Scripture coverage, or compare teaching under separate speaker/date
+scopes and trace a theme over time. A shared tray keeps up to six exact source
+records for transcript inspection and a reviewed follow-up in the conversation.
+References include their research run because citation tokens can repeat across
+requests. Speaker, date, timestamp, scope and verification stay attached.
+
+Opening the App, changing views and pinning sources do not generate research.
+The four existing metered tools retain their allowance and budget behavior;
+the App labels generation actions explicitly. A follow-up is sent only after
+the user reviews it and selects **Send to conversation**. Unsupported host
+features have text and canonical URL fallbacks. The App stores no research
+outside its temporary session and changes no permissions.
+
+Continuity is a pastoral review aid. Consider different emphasis, paraphrase,
+audience context, explicit correction/development, insufficient evidence and
+interpretation ambiguity before calling statements contradictory. Scripture
+coverage describes the archive; it is not a judgment of biblical truth. Church
+doctrine requires explicit church-approved, versioned sources, never an
+inference from one speaker. See the
+[research App guide](https://github.com/joshuasaurusrex/last-weeks-sermon/blob/develop/docs/mcp-teaching-research-app.md)
+for limits and supported-host acceptance checks.
+
 ## Setup
 
 You need two values from **Studio → Connections** in your Rewind app

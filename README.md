@@ -33,6 +33,10 @@ The Rewind corpus plugin. Bundles:
 - **The Rewind MCP connection** — eight read-only corpus tools (`corpus_search`,
   `scripture_coverage`, `corpus_qa`, `compare_treatments`, `trace_theme`,
   `find_illustrations`, `get_sermon`, `list_recent_sermons`) plus sermon resources.
+- **Optional teaching research App** — when the connected server and host support
+  MCP Apps, `open_research_workspace` opens Archive, Topics, Illustrations,
+  Scripture and Continuity with a shared source tray. Opening it does not run
+  research; the same eight tools remain usable in text-only clients.
 - **Skills** — _Sermon prep_, _Corpus lookup_, _Study brief_, _Series planner_,
   _Illustration finder_. Claude activates them from plain-language requests.
 - **Commands** — `/rewind-prep`, `/rewind-lookup`.
