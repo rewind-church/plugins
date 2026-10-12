@@ -1,7 +1,7 @@
 {
   "name": "rewind",
-  "version": "0.4.0",
-  "description": "Prep sermons, plan series, and search your church's own preaching corpus through Rewind's read-only MCP — grounded in what your church has actually preached, with verbatim citations.",
+  "version": "0.5.0",
+  "description": "Prep sermons, plan series, and search your church's own preaching corpus through Rewind's MCP — grounded in what your church has actually preached, with verbatim citations. It never changes sermon content; it can save source clips you choose to your private history.",
   "author": { "name": "Rewind", "url": "https://rewind.church" },
   "homepage": "https://rewind.church",
   "keywords": ["sermon", "preaching", "church", "bible", "rewind", "corpus", "mcp"]
