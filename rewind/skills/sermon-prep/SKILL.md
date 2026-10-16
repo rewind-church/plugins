@@ -1,81 +1,28 @@
 ---
 name: Sermon prep
-description: Use when someone is preparing or planning a sermon on a passage, text, or topic — to ground the message in what their church has ALREADY preached (so it builds instead of repeats), surface relevant past illustrations, and check scripture coverage. Triggers on "help me prep this week", "I'm preaching on <passage/topic>", "what should I do with <text>", "prep a message on …".
-version: 0.3.0
+description: Use when someone prepares a sermon on a passage or topic and wants prior teaching, recorded Scripture coverage, attributed stories, or a draft-overlap check from their own church's archive.
+version: 0.6.0
 ---
 
-# Sermon prep — grounded in your church's own corpus
+# Sermon prep
 
-You are helping a preacher prepare a sermon. The Rewind MCP tools (`rewind` server)
-expose **this church's own preached sermons, with verbatim citations**. They cannot
-change sermon content. The goal is a message that **builds on** what the church has
-already preached, never blindly repeats it, and is honestly grounded in the church's
-real voice.
+Read [the research contract](../../references/research-contract.md) before calling tools. Help the preacher choose a direction from recorded evidence and their own judgment. Rewind cannot edit sermon content through this connection.
 
-## The loop
+## Prepare a message
 
-Work through these, narrating briefly and citing as you go. Skip steps the preacher
-has already done.
+1. Confirm the passage, topic, audience, and occasion from the request. Ask one short question only when the target is ambiguous.
+2. Call `ask` with `question` for free cited evidence, or `search` with `query` to discover moments. Narrow with `filters` when requested. Research defaults to weekend messages. Open relevant context with `get_sermon`.
+3. For a passage, call `coverage` with an optional book or chapter `range`, such as `"Romans 5–8"`. Carry its effective scope into the answer. A recorded gap does not prove the church never taught the text.
+4. Call `find_illustrations` with `topicOrPassage` for attributed stories. Retain the teller and whole available wording. Treat recorded reuse counts and dates as neutral facts. Never retell another speaker's personal story as the current preacher's experience.
+5. If the preacher asks to check a draft, disclose the draft-data behavior in the research contract before calling `check_overlap` with `text`. Shared wording is descriptive. Reuse, revision, and theological judgment remain the preacher's choices.
+6. Offer possible angles or an outline. Separate quoted prior teaching from your own suggestions. Let the preacher decide whether to build on, revisit, or revise earlier teaching.
 
-1. **Anchor the text/topic.** Confirm the passage or topic and the audience/occasion
-   if given. Don't assume — ask one short question only if the target is ambiguous.
+Use `map_topic` when grouped counts help, `trace_theme` for statements over time, and `search` with `order: "recent"` and no `query` for the run-up to this week's message. Compare subjects by reading each side's cited context in the conversation.
 
-2. **Check what's already been preached (anti-repetition).** Call `ask` with
-   `question` ("What has our church already preached about <topic/passage>?") for
-   free cited excerpts, and/or `corpus_search` (`query`) for verbatim hits. Both take
-   optional `filters` (`speaker`, `book`/`chapter`, `topic`, `contentKind`,
-   `fromDate`/`toDate`) when the preacher scopes the question; `ask` defaults to
-   weekend sermons, while `corpus_search` covers every content kind unless filtered.
-   Open anything on point with `get_sermon` (by `sermonId`, optionally `at` a moment).
-   Summarize what's been said, **with citations (sermon title + date + speaker +
-   timestamp)**. Explicitly tell the preacher what NOT to re-tread and where there's
-   room to go deeper or differently.
+Cite every claim about prior teaching with the returned title, date, speaker, link, and timestamp when available. Preserve content-kind labels. Unknown metadata stays unknown. Do not infer doctrine from selected quotations or invent an absence claim.
 
-3. **Check scripture coverage.** For a passage, call `coverage` (optional `range`,
-   e.g. `"Romans 5–8"`) or `scripture_coverage` to see how often that book/chapter has
-   been preached and by whom — and whether nearby texts are gaps worth connecting to.
-   A gap describes the recorded archive, not proof the text was never taught.
+## Read, discuss, and save
 
-4. **Pull relevant illustrations.** Call `find_illustrations` with `topicOrPassage`
-   for the theme (free). Present them with **attribution preserved verbatim** — a
-   personal story stays attributed to whoever told it; never rewrite it in the first
-   person for the current preacher.
+Continue long transcripts with the returned offsets and `transcriptHash`. Discuss does not save. Use `history` when the user asks to resume earlier research. Use `add_to_chat` only for an explicit save request. For a story, fetch a versioned transcript page at its moment before selecting exact contiguous wording and the original segment start. Never add omission markers to the exact source wording.
 
-5. **Check a draft, if there is one.** `check_overlap` with the draft as `text`
-   describes shared wording and related earlier teaching. It gives no plagiarism or
-   theological verdict; reuse or revision is the preacher's call.
-
-6. **Offer a grounded direction.** Propose 2–3 angles or an outline that build on the
-   above. Make clear which parts are drawn from the corpus (cited) and which are your
-   own suggestion. The preacher decides — you assist.
-
-If the preacher asks to keep a source, `add_to_chat` saves it to their private
-history; `history` recalls earlier saved clips when they ask to resume. Only save when
-asked.
-
-## Costs and errors
-
-Every step above is free. A Rewind-written synthesis (`ask` with `synthesize: true`)
-is optional and spends the church's metered allowance. Request one only if the
-preacher asks for it: call first without `spendConfirmed` to get the cost disclosure,
-relay it (don't invent an amount or balance), and only after an explicit yes repeat
-the call with `spendConfirmed: true`. Never set `spendConfirmed` on your own.
-
-If a tool refuses, read its `code`: on `rate_limited`, wait `retryAfterSeconds` (about
-a minute if absent) and retry once; on `daily_limit`, stop and tell the preacher the
-token's daily request limit is reached (it resets within 24 hours); on
-`auth_required`, tell them to reconnect Rewind. An error without a `code`: report what
-it says and don't loop. Never repeat a confirmed synthesis after any other failure.
-
-## Rules (non-negotiable)
-
-- **Cite everything from the corpus.** Every claim about what the church preached
-  carries the sermon + date + timestamp the tool returned. Never paraphrase a quote
-  as if verbatim.
-- **Never fabricate.** If the corpus has nothing on the topic, say so plainly — that
-  itself is useful (it's open ground in the recorded archive). Do not invent past
-  sermons or teaching.
-- **Preserve voice and attribution.** Display church-authored titles and speaker
-  names exactly as returned. Personal illustrations keep their teller.
-- **You assist; you don't preach.** Offer directions, outlines, and connections —
-  the preacher writes the sermon.
+The research contract governs cost disclosure, confirmation, uncertain saves, request limits, and errors. Optional `ask` synthesis or deep `trace_theme` uses metered Rewind allowance only after explicit confirmation for that request. Never set `spendConfirmed` yourself.

@@ -1,102 +1,82 @@
 # Rewind for Claude
 
-Connect Claude to **your church's own preaching corpus** through Rewind's MCP server.
-Search, read, compare and trace what your church has actually preached — and get back
-**verbatim, citeable** sources (sermon + timestamp + the speaker's real words).
+Search your church's recorded teaching, read original context, and prepare a message with cited sources. The plugin selects Rewind's ten-tool MCP App catalog. The connection cannot create, edit, or delete sermon content. It saves selected source clips to your private Rewind history only when you ask.
 
-The connection cannot create, edit, or delete sermon content. It can save source clips
-you choose to your private Rewind history (`add_to_chat`), and only when you ask.
+## Connect and install
 
-This plugin bundles:
+You need Studio research access in your church's Rewind environment. Supported roles are admin, staff, planter, seminary faculty, and seminary student. An ordinary member account cannot create a token. Ask your church administrator if you cannot open Connections.
 
-- **The Rewind MCP connection** (`.mcp.json`) — sixteen tools, all free by default:
+1. Create a personal MCP token in **Studio → Settings → Connections** at `https://<your-church>.rewind.church/studio/settings/connections`.
+2. Set both values in the terminal that launches Claude Code:
 
-  | Tool | What it does |
-  |---|---|
-  | `corpus_search` | Verbatim transcript excerpts for a query (`query`, `k`, `filters`), ranked by relevance. Searches every content kind unless you filter. |
-  | `search` | Ranked sermon moments for a `query`; `order: "recent"` (no query) lists sermons newest first. |
-  | `list_recent_sermons` | The latest sermons, newest first (`limit`, `contentKind`). |
-  | `get_sermon` | One sermon by `sermonId`, or by `title` + `date`: overview + verbatim transcript, optionally `group-guide`, `devotional`, `illustrations`, with transcript paging. |
-  | `fetch` | One sermon's verbatim transcript by `id` (the companion to `search`). |
-  | `ask`, `corpus_qa` | Exact cited excerpts that bear on a `question`. Optional written synthesis (see Cost). |
-  | `compare_treatments` | Source evidence for two subjects side by side (`columnA`, `columnB`). Optional written comparison. |
-  | `trace_theme` | Dated statements on a `theme` in recorded order. Optional written synthesis (`deep`). |
-  | `map_topic` | A `topic` or `passage` mapped into up to twelve labeled `groups`, with counts, dates, speakers and exact excerpts. |
-  | `check_overlap` | Which wording or subjects in a draft (`text`) overlap earlier teaching. |
-  | `find_illustrations` | Stories told on a topic or passage (`topicOrPassage`), with their teller, from a precomputed index. |
-  | `scripture_coverage`, `coverage` | Which Bible books and chapters have recorded sermons, when, and by whom. `coverage` also takes a chapter `range`. |
-  | `add_to_chat` | Saves source clips you choose to your private history. Only when you ask. |
-  | `history` | Recalls the clips you saved earlier in this church. |
+   ```bash
+   export REWIND_MCP_URL="https://<your-church>.rewind.church/api/mcp/mcp"
+   export REWIND_MCP_TOKEN="rwd_mcp_YOUR_TOKEN_HERE"
+   ```
 
-  Most research tools take an optional `filters` object: `speaker` · `book` (+
-  `chapter`) · `topic` · `contentKind` · `fromDate`/`toDate` (YYYY-MM-DD). The
-  newer research tools default `contentKind` to weekend sermons; `corpus_search`
-  and `list_recent_sermons` include every content kind unless you set it. Sermon
-  resources (`rewind://sermon/{id}/overview`, `/transcript`, …) are available too.
-- **Skills** that turn the tools into weekly workflows: **Sermon prep**, **Corpus
-  lookup**, **Study brief**, **Series planner**, **Illustration finder**. Claude
-  activates these automatically from plain-language requests.
-- **Commands**: `/rewind-prep`, `/rewind-lookup`.
+   `REWIND_MCP_URL` is the canonical endpoint without a query. The plugin appends `?profile=app`. Remove an existing `?profile=...` suffix from this variable before starting the new plugin.
 
-## Setup
+3. Install the plugin:
 
-You need two values from **Studio → Connections** in your Rewind app
-(`https://<your-church>.rewind.church/studio/settings/connections`):
+   ```bash
+   claude plugin marketplace add rewind-church/plugins
+   claude plugin install rewind@rewind-church
+   ```
 
-- `REWIND_MCP_URL` — `https://<your-church>.rewind.church/api/mcp/mcp`
-- `REWIND_MCP_TOKEN` — a token you mint there (shown once; revocable)
+4. Start a new Claude Code session from that terminal. Check `/mcp` for `rewind`.
 
-Set them in your environment before launching Claude Code:
+For an existing installation, update the marketplace and Rewind through Claude Code's plugin manager, then restart. The public [setup guide](https://github.com/rewind-church/plugins/blob/main/docs/mcp-setup.md) includes other clients, upgrades, limits, and troubleshooting. This package installs a Claude Code plugin. Other MCP clients require their own connection setup.
 
-```bash
-export REWIND_MCP_URL="https://<your-church>.rewind.church/api/mcp/mcp"
-export REWIND_MCP_TOKEN="rwd_mcp_…"
-```
+## Use the ten App tools
 
-### Install
+| Tool | Inputs and behavior |
+| --- | --- |
+| `search` | Use `query` for relevance, or `order: "recent"` without `query` for newest first. Optional `filters` and `limit` up to 20. |
+| `get_sermon` | Use `sermonId`, or `title` and `date`. Read overview and transcript by default. Add `include` for available group guides, devotionals, or illustrations. Transcripts have versioned continuation. |
+| `ask` | Use `question` for cited source evidence. Optional confirmed `synthesize: true` requests Rewind-written synthesis. |
+| `check_overlap` | Use draft `text` up to 20,000 characters. Describes shared wording and related evidence, without an originality or theological verdict. |
+| `find_illustrations` | Use `topicOrPassage`, optional `notToldSince`, and `limit` up to 8. Full stories, excerpts, and incomplete indexes remain distinct. |
+| `map_topic` | Supply `topic` or `passage`, plus 1–12 labeled query `groups`. Optional `perGroup` returns up to 3 excerpts per group. |
+| `coverage` | Inspect recorded books or chapters. Optional `range`, such as `"Romans 5–8"`, and `filters`. |
+| `trace_theme` | Use `theme` for statements in recorded-date order. Optional confirmed `deep: true` requests Rewind-written synthesis. |
+| `add_to_chat` | Save 1–6 selected sources with exact wording and source times. Requires your choice to save. |
+| `history` | Recall your saved clips with optional `topic`, `since`, and `limit` up to 40. Pass `nextBefore` unchanged as `before` to continue. |
 
-```bash
-# Add the Rewind marketplace, then install the plugin
-claude plugin marketplace add rewind-church/plugins
-claude plugin install rewind@rewind-church
-```
+The research tools that accept `filters` default to weekend messages, `contentKind: "sermon"`. Set `"class"`, `"conference"`, `"midweek"`, or `"special"` to research another kind. Other filters are `speaker`, `book`, `chapter`, `topic`, `fromDate`, and `toDate`. A chapter needs its book. Carry the returned scope into your answer.
 
-## What's it cost?
+Each research result can render an App in a compatible host. Text and structured results remain available when App rendering is unsupported. An installed package or automated fixture check does not establish that a native host displays the interface correctly.
 
-The conversation runs on **your** Claude. Every Rewind tool is free by default:
-searching, reading sermons, coverage, illustrations (`find_illustrations` reads a
-precomputed index) and cited source evidence run no Rewind synthesis. Search and
-evidence use only a tiny query embedding, which is not billed to your allowance.
+## Use the workflows
 
-Rewind spends only on an optional written synthesis:
+Ask in plain language, such as "Help me prepare a message on Romans 8" or "Find stories we have told about forgiveness."
 
-- `ask`, `corpus_qa` and `compare_treatments` with `synthesize: true`, or
-  `trace_theme` with `deep: true`;
-- and only together with `spendConfirmed: true`. Without it, the tool returns a cost
-  disclosure and spends nothing.
+The plugin includes Sermon prep, Corpus lookup, Study brief, Series planner, and Illustration finder skills. The command names include the plugin namespace:
 
-The skills never set `spendConfirmed` on their own. They show you the disclosure and
-wait for your explicit yes. A synthesis uses your church's metered Rewind allowance
-(typically a few cents; the tools report no exact amount or balance) and is capped
-by your token's daily spend limit.
+- `/rewind:rewind-prep Romans 8`
+- `/rewind:rewind-lookup What have we preached about anxiety?`
 
-## Limits and errors
+A comparison uses cited results for each subject in the conversation. There is no separate App comparison tool or workspace-opening tool.
 
-Each token has a burst limit, a daily request limit and a daily spend cap. When a tool
-refuses, the skills read its `code`:
+## Read, discuss, and save sources
 
-- `rate_limited` — too many requests at once. They wait `retryAfterSeconds` and retry.
-- `daily_limit` — the token's daily request limit is reached. They stop and tell you;
-  it resets within 24 hours.
-- `auth_required` — the token is missing, revoked or expired. Reconnect Rewind: mint a
-  new token in Studio → Connections and update `REWIND_MCP_TOKEN`.
+Every corpus claim needs its returned title, date, speaker, source link, and timestamp when available. Preserve Scripture references and content kinds. Missing dates, speakers, or timings stay unknown. A quoted excerpt is exact source wording, not a paraphrase. A class session is labeled as a class.
 
-A refusal without a `code` (a spend or research limit on a synthesis, or a request the
-server cannot accept) is reported to you as-is rather than retried.
+Long transcripts page. Continue `get_sermon` with `parts.transcriptPage.nextOffset` as `offset`, `nextSegmentOffset` as `segmentOffset`, and the same `transcriptHash`. A final page does not mean earlier pages were read. The App's continuation control keeps pages in one reader, while separate conversation tool calls may open separate host panels.
 
-## Scoped to your church
+Discuss uses the selected material in the conversation. It does not save a clip. To save a story, first read a versioned transcript page at its returned moment. Use exact contiguous wording from `parts.transcriptSegments` and its original `startSeconds`. Specific-sermon illustrations return exact bounded `excerpt` text, its source `startSeconds`, and a separate `excerptTruncated` flag. The labeled `atSeconds` can differ from the source start. Read the source page before choosing the full story or a smaller contiguous clip. Do not add an omission marker to the quote. An empty quote at zero is a whole-sermon reference, never a substitute for a requested quotation.
 
-Every request is scoped to **your church only**. A token is tied to you, carries your
-role's permissions, and can be revoked instantly from the Connections page. No tool
-can create, edit or delete sermon content; `add_to_chat` writes only to your own
-private clip history.
+A timed-out save may have succeeded. Keep the same selection and `requestKey` on retries, or call `history` with that key alone to check without writing. See the [source and recovery reference](https://github.com/rewind-church/plugins/blob/main/docs/mcp-setup.md#read-and-save-exact-sources).
+
+## Understand cost and data use
+
+Retrieval and stored artifacts use no metered Rewind synthesis. Search and source evidence can use query embeddings. Optional synthesis uses your church's metered allowance only after you confirm the disclosure for that request. `ask` takes `synthesize: true`; `trace_theme` takes `deep: true`. The skills first request the disclosure without `spendConfirmed`, then wait for your explicit yes. Exact credit cost and account balance may be unavailable. Your Claude subscription or API costs are separate.
+
+Draft-overlap checks may send up to three 500-character excerpts to OpenAI for embeddings on a cache miss. This path does not persist draft text. Derived vectors use hashed cache keys with a configurable 24-hour default. Material in Claude or another chosen client is also subject to that client's training, Memory, retention, and sharing controls.
+
+Tokens have burst limits, daily request limits, and daily spending caps. On `rate_limited`, wait `retryAfterSeconds` and retry once. On `daily_limit`, stop. On `auth_required`, reconnect with your own authorized account. Report other refusals without looping. Do not blindly repeat a confirmed synthesis after an uncertain failure.
+
+Read the full [setup guide](https://github.com/rewind-church/plugins/blob/main/docs/mcp-setup.md), [privacy policy](https://rewind.church/legal/privacy), and [AI explanation](https://rewind.church/legal/ai). [Report an issue](https://github.com/rewind-church/plugins/issues) or [contact Rewind](https://rewind.church/contact?topic=support) without posting secrets or private source text.
+
+## License
+
+The installed plugin includes its [MIT license](./LICENSE).

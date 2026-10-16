@@ -39,6 +39,8 @@ If the account or service list cannot be loaded, use the retry or reconnect cont
 
 Turning on automatic reading selects Planning Center as your primary notes source if you have not configured another one. If your church already reads notes from another source, Rewind keeps that source and explains the conflict; [contact Rewind](https://rewind.church/contact?topic=support) before changing it.
 
+The nightly read checks up to 25 plans across the selected service types: up to 13 recent-past and 12 nearest-upcoming plans, filling unused space from the other side. This reserves space for recent messages even when there are many future plans. It is a bounded window, not an import of the full Planning Center archive. Contact Rewind if you need older plans.
+
 After the next nightly import, check that the correct message, date, Big Idea, points, questions, and next steps reached Rewind. A saved setting confirms your choice; checking the imported notes confirms that your plan and categories are usable. Review the notes beside the sermon before publishing member-facing material; an ambiguous match needs a person to resolve it.
 
 To stop new automatic plan reads, turn off **Read these plans automatically each night**. Rewind keeps your selections, mapping, and already imported notes. Removing your last selected service type also turns automatic reading off. Reconnecting after a disconnect requires turning it on again.
