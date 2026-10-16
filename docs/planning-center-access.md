@@ -11,7 +11,7 @@ Your selections in Rewind tell its plan importer which service types to read. Tu
 ## What is read
 
 - Service type names and their note categories, so your church can choose the relevant services.
-- Plans in the selected service types, including their title, series title, service dates, and source link.
+- Up to 25 recent and upcoming plans across the selected service types on each nightly read, including their title, series title, service dates, and source link. The shared window reserves up to 13 recent-past and 12 nearest-upcoming plans, filling unused space from the other side; it is not an import of the full archive.
 - Plan notes, from which Rewind selects the categories mapped to Big Idea, Scripture, Points, Questions, and Next Steps.
 - Plan items, descriptions, and item notes when your mapping uses those instead of plan notes.
 - Scheduled team member names and position labels only when your church configures a speaker-position mapping. Rewind keeps the mapped speaker's name; it does not import the roster or email addresses into the sermon record. The default setup makes no team-member request.

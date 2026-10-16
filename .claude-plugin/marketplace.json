@@ -1,16 +1,25 @@
 {
   "name": "rewind-church",
-  "owner": { "name": "Rewind", "url": "https://rewind.church" },
+  "owner": {
+    "name": "Rewind",
+    "url": "https://rewind.church"
+  },
   "metadata": {
-    "description": "Official Rewind plugins for Claude — connect Claude to your church's own preaching corpus, with verbatim citations. It never changes sermon content.",
-    "version": "0.5.0"
+    "description": "Official Rewind plugins for Claude. Research your church's recorded teaching with exact citations and the ten-tool MCP App.",
+    "version": "0.6.0"
   },
   "plugins": [
     {
       "name": "rewind",
       "source": "./rewind",
-      "description": "Prep sermons, plan series, build study briefs, and search how your church has already preached a passage or theme — grounded only in your church's sermons, with verbatim citations. The MCP connection cannot create, edit or delete sermon content; it can save source clips you choose to your private history.",
-      "keywords": ["sermon", "preaching", "church", "bible", "mcp"]
+      "description": "Prepare messages, plan series, and study your church's recorded teaching through Rewind's ten-tool MCP App. It can save chosen private source clips and cannot edit sermon content.",
+      "keywords": [
+        "sermon",
+        "preaching",
+        "church",
+        "bible",
+        "mcp"
+      ]
     }
   ]
 }

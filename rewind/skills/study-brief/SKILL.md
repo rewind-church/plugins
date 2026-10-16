@@ -1,64 +1,27 @@
 ---
 name: Study brief
-description: Use when someone wants a study brief or exegetical starting point for a passage, grounded in how their own church has treated it — "build me a brief on <passage>", "study notes for <text>", "what do I need to know to preach <passage>", "pull together background on <text>". Leads with the church's own corpus, then scripture, then general study.
-version: 0.4.0
+description: Use when someone wants a study brief or exegetical starting point for a passage, beginning with their church's recorded treatments, then Scripture context and clearly labeled general study.
+version: 0.6.0
 ---
 
-# Study brief — a passage brief led by your church's corpus
+# Study brief
 
-Assemble a working study brief for a passage. The distinctive value is that it
-**leads with how THIS church has already treated the text** (via the Rewind MCP
-`rewind` server), not generic commentary.
+Read [the research contract](../../references/research-contract.md) before calling tools. Build a working brief from the church's recorded teaching before adding general study. This connection cannot edit sermon content.
 
-## Build order (corpus first)
+## Build a brief
 
-1. **The church's own treatments.** `ask` with `question` ("How has our church
-   preached <passage>?") for free cited excerpts, and `corpus_search` (`query`) for
-   the verbatim moments — narrow with the optional `filters` (`book`/`chapter` for the
-   passage itself; `contentKind` if the user wants weekend sermons vs classes — `ask`
-   defaults to weekend sermons, `corpus_search` covers every kind unless filtered).
-   When a sermon is on point, `get_sermon` (by `sermonId`) for the overview and/or
-   full transcript — or the `rewind://sermon/{id}/overview` resource if your client
-   prefers. Cite each (title + date + speaker + timestamp).
-2. **Scripture context.** The passage itself, its immediate context, and — via
-   `coverage` (with `range` set to the book or chapters, e.g. `"Romans"` or
-   `"Romans 5–8"`) or `scripture_coverage` — how this book sits in the church's
-   overall preaching.
-   Rewind's tools do not supply Bible text; take the passage from a source available
-   to you, and never present a sermon excerpt as Scripture itself.
-3. **General study layer.** Only after the above, add standard background (genre,
-   structure, key terms, cross-references). Label this clearly as general study, not
-   church corpus.
+1. Call `ask` with a `question` about the passage for cited evidence, or `search` with `query` to find moments. Narrow with `filters.book` and `filters.chapter` when appropriate. The default content kind is weekend messages. If the user wants classes or another kind, set it explicitly and label the results.
+2. Open relevant messages with `get_sermon` using the returned `sermonId`. Read original context and continue long transcripts with the returned offsets and `transcriptHash`. Requested group guides or devotionals may be absent or unapproved; report those states.
+3. Call `coverage` with a book or chapter `range`, such as `"Romans"` or `"Romans 5–8"`, to place the recorded treatments in context. Carry the effective filters into coverage claims. A recorded gap is not proof that the church never taught the passage.
+4. Obtain Bible text from an available Scripture source if needed. Rewind's research tools do not supply Bible text. Never present a sermon quotation as Scripture.
+5. Add general background, genre, structure, key terms, or cross-references only after the recorded evidence. Label these as general study, separate from what the church preached.
 
-## Output shape
+Present the passage and context, cited prior treatments, key observations, possible threads to explore, and questions the returned evidence leaves open. Preserve source titles, speakers, dates, links, timestamps, Scripture references, and content kinds. Quote exactly. Do not infer a doctrinal position from selected excerpts or invent missing historical treatments.
 
-A brief the preacher can actually use:
-- **Passage + context** (1–2 lines)
-- **What our church has said** — cited, with what's been emphasized and what hasn't
-- **Key observations** — structure, terms, tensions in the text
-- **Threads to pull** — angles that build on (not repeat) prior treatments
-- **Open ground** — what the recorded sermons have NOT yet drawn out here
+## Keep sources and costs explicit
 
-## Costs and errors
+Compare subjects by obtaining evidence for each and reading it in context in the conversation. Use `trace_theme` for dated statements and `map_topic` when grouped indexed-word counts help. The preacher decides what to adopt.
 
-Every tool above is free. A Rewind-written synthesis (`ask` with `synthesize: true`)
-is optional and spends the church's metered allowance. Request one only if the user
-asks for it: call first without `spendConfirmed` to get the cost disclosure, relay it
-(don't invent an amount or balance), and only after an explicit yes repeat the call
-with `spendConfirmed: true`. Never set `spendConfirmed` on your own.
+Discuss does not save. Use `add_to_chat` only for a requested save and `history` to resume earlier chosen sources. Before saving a story, fetch a versioned transcript page at its moment. Use exact contiguous wording and the original segment start. Do not add omission markers.
 
-If a tool refuses, read its `code`: on `rate_limited`, wait `retryAfterSeconds` (about
-a minute if absent) and retry once; on `daily_limit`, stop and tell the user the
-token's daily request limit is reached (it resets within 24 hours); on
-`auth_required`, tell them to reconnect Rewind. An error without a `code`: report what
-it says and don't loop. Never repeat a confirmed synthesis after any other failure.
-
-## Rules
-
-- **Corpus claims are cited verbatim**; general-study claims are labeled as such.
-  Never blur the two.
-- **No fabricated corpus.** If the church hasn't preached the passage, say so — that
-  shapes the brief (it's fresh ground in the recorded archive) rather than being a
-  gap to paper over.
-- **The preacher's voice wins.** This is raw material for their study, not a finished
-  position to adopt.
+The research contract governs request limits, errors, data controls, and uncertain saves. Source evidence uses no metered Rewind synthesis. Optional synthesized `ask` requires its cost disclosure and an explicit yes for that request before `spendConfirmed: true`. Never infer consent or invent an amount or balance.

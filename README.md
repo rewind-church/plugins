@@ -1,76 +1,74 @@
 # Rewind plugins for Claude
 
-Official [Claude Code](https://docs.claude.com/en/docs/claude-code) plugins from
-**[Rewind](https://rewind.church)** — connect Claude to **your church's own preaching
-corpus** and turn it into your weekly prep workflow.
+Connect [Claude Code](https://code.claude.com/docs/en/plugins) to your church's recorded teaching through [Rewind](https://rewind.church).
 
-This repository is the Rewind plugin **marketplace**. Everything here is scoped to your
-church. Nothing can create, edit, or delete your church's sermon content; the one thing
-the connection can write is a source clip you ask it to save to your private Rewind
-history.
+This repository is the official Rewind plugin marketplace. Version 0.6.0 selects the newer ten-tool MCP App catalog and includes five skills and two commands. Rewind cannot create, edit, or delete sermon content through this connection. It can save source clips you choose to your private Rewind history.
 
 ## Install
 
-You need a Rewind account. From **Studio → Connections** in your church's Rewind app
-(`https://<your-church>.rewind.church/studio/settings/connections`), mint a token, then:
+You need access to Studio research in your church's Rewind environment. The supported roles are admin, staff, planter, seminary faculty, and seminary student. An ordinary member account cannot create a token. Ask your church administrator about access if you cannot open Connections.
 
-```bash
-# Set your church's endpoint + token (shown once in the app)
-export REWIND_MCP_URL="https://<your-church>.rewind.church/api/mcp/mcp"
-export REWIND_MCP_TOKEN="rwd_mcp_…"
+1. Open **Studio → Settings → Connections** at `https://<your-church>.rewind.church/studio/settings/connections`.
+2. Create a personal MCP token and copy it while it is shown.
+3. Set the endpoint and token in the terminal that launches Claude Code:
 
-# Add this marketplace and install the plugin
-claude plugin marketplace add rewind-church/plugins
-claude plugin install rewind@rewind-church
-```
+   ```bash
+   export REWIND_MCP_URL="https://<your-church>.rewind.church/api/mcp/mcp"
+   export REWIND_MCP_TOKEN="rwd_mcp_YOUR_TOKEN_HERE"
+   ```
 
-Then just ask in plain language — *"prep this week's message on Romans 8"*, *"what have we
-preached about anxiety?"* — and Claude orchestrates the corpus tools for you.
+   Keep `REWIND_MCP_URL` query-free. The plugin appends `?profile=app` itself. If you previously added a `?profile=...` suffix to this variable, remove that suffix before starting Claude Code.
 
-## What's inside
+4. Add the marketplace and install the plugin:
 
-### `rewind`
-The Rewind corpus plugin. Bundles:
+   ```bash
+   claude plugin marketplace add rewind-church/plugins
+   claude plugin install rewind@rewind-church
+   ```
 
-- **The Rewind MCP connection** — sixteen corpus tools, all free by default:
-  - search and read: `corpus_search`, `search`, `list_recent_sermons`, `get_sermon`,
-    `fetch`;
-  - evidence and research: `ask`, `corpus_qa`, `compare_treatments`, `trace_theme`,
-    `map_topic`, `check_overlap`, `find_illustrations`;
-  - Scripture coverage: `scripture_coverage`, `coverage`;
-  - your saved clips: `add_to_chat` (saves clips you choose), `history`.
+5. Start a new Claude Code session from that terminal. Check `/mcp` for the `rewind` connection, then ask, "What have we preached about anxiety?"
 
-  Sermon resources (`rewind://sermon/{id}/…`) are available too.
-- **Skills** — _Sermon prep_, _Corpus lookup_, _Study brief_, _Series planner_,
-  _Illustration finder_. Claude activates them from plain-language requests.
-- **Commands** — `/rewind-prep`, `/rewind-lookup`.
+For an existing installation, update this marketplace and the Rewind plugin through Claude Code's plugin manager, then restart the session. The [setup guide](./docs/mcp-setup.md) covers upgrades, other clients, authentication, limits, and troubleshooting.
 
-See [`rewind/README.md`](./rewind/README.md) for details.
+## Included workflows
 
-## Scoped to your church
+The plugin uses these ten App tools:
 
-Every request is scoped to **your church only** and authenticated by a token that's tied
-to you, carries your role's permissions, has a daily request limit and a daily spend cap,
-and can be **revoked instantly** from the Connections page. No tool can create, edit or
-delete sermon content. `add_to_chat` saves source clips to your private history, and
-only when you ask it to. The plugin itself carries no credentials — your endpoint and
-token are supplied via the two environment variables above.
+| Tool | Use |
+| --- | --- |
+| `search` | Find teaching by topic or list recent messages with `order: "recent"`. |
+| `get_sermon` | Open original context, available artifacts, and versioned transcript pages. |
+| `ask` | Retrieve cited evidence for a question. |
+| `check_overlap` | Describe shared wording and related teaching in a draft. |
+| `find_illustrations` | Find attributed stories with explicit source availability. |
+| `map_topic` | Group recorded teaching by supplied topic queries. |
+| `coverage` | Inspect recorded Scripture coverage. |
+| `trace_theme` | Read dated statements about a theme. |
+| `add_to_chat` | Save clips only when you choose to save them. |
+| `history` | Recall your private saved clips in this church. |
 
-## Cost
+The five skills are Sermon prep, Corpus lookup, Study brief, Series planner, and Illustration finder. Use plain language or invoke `/rewind:rewind-prep` and `/rewind:rewind-lookup`. See the [plugin README](./rewind/README.md) for examples.
 
-The conversation runs on **your** Claude. Every Rewind tool is free by default: search,
-reading, coverage, illustrations and source evidence run no Rewind synthesis (search
-uses only a tiny query embedding). Rewind spends only on an optional written synthesis
-from `ask`, `corpus_qa`, `compare_treatments` or `trace_theme`, and only after you
-confirm it. The skills ask before they request one. Each synthesis uses your church's metered Rewind allowance
-(typically a few cents; the tools report no exact amount or balance) and is capped by
-your token's daily spend limit. Full breakdown in the
-[setup guide](https://rewind.church).
+Research results can render an interactive App in a compatible host. A client that does not render MCP Apps can still receive supported tool text and structured results. Installing this Claude Code plugin does not install a native ChatGPT plugin or prove that a particular host supports the App interface. See [other-client setup](./docs/mcp-setup.md#connect-other-mcp-clients).
 
-## Support
+## Permissions, cost, and data
 
-Questions or issues: open an issue here, or contact us via your Rewind app.
+Each request uses your current church membership and permissions. Tokens have request and spending limits and can be revoked from Connections. A clip belongs to your account in that church. Reading or discussing a source does not save it.
 
-## License
+Retrieval, stored artifacts, illustrations, and source evidence use no metered Rewind synthesis. Searches can use query embeddings. Optional Rewind-written synthesis from `ask` or `trace_theme` uses your church's metered allowance only after your explicit confirmation. Credit amounts and balances may be unavailable. Your Claude subscription or API costs are separate.
 
-[MIT](./LICENSE) © Rewind
+Draft-overlap checks may send up to three 500-character draft excerpts to OpenAI for embeddings on a cache miss. This path does not persist the draft text. Derived vectors use hashed cache keys with a configurable 24-hour default. Your chosen AI client's own training, Memory, retention, and sharing controls also apply to material you send to that client. Read the [data and cost reference](./docs/mcp-setup.md#understand-cost-and-data-use).
+
+## Planning Center
+
+The [Planning Center setup guide](./docs/planning-center-setup.md) and [access guide](./docs/planning-center-access.md) describe that separate Services connection. Installing this plugin grants no Planning Center access.
+
+## Maintainer validation
+
+Use Node from `.node-version`, then run `npm ci --no-audit` and `npm run validate`. CI and the tracked pre-push hook run the same static check. It uses pinned Claude Code 2.1.300 in strict JSON mode, validates the marketplace, plugin, five skills and two commands, and proves five extended MCP checks reject unsafe fixture configurations. It does not connect to Rewind or start a model session. The minimum extended-validator version is 2.1.281; an older or unpinned executable fails the check. To compare the app's bundled copy before publication, run `npm run validate -- --mirror /absolute/path/to/rewind-plugin`.
+
+## Support and license
+
+[Open an issue](https://github.com/rewind-church/plugins/issues) or [contact Rewind](https://rewind.church/contact?topic=support). Do not include tokens or private sermon material in public issues.
+
+The repository and installed plugin include the [MIT license](./LICENSE).
