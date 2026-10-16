@@ -11,7 +11,7 @@ A token belongs to your own account in one church. Rewind checks your current me
 ## Install the Claude Code plugin
 
 1. Open `https://<your-church>.rewind.church/studio/settings/connections`.
-2. Create a personal MCP token. Copy it while it is shown. Choose an appropriate daily spending cap and expiry.
+2. Create a personal MCP token with a name and an appropriate daily spending cap. Copy it while it is shown.
 3. Set the endpoint and token in the terminal that launches Claude Code:
 
    ```bash
