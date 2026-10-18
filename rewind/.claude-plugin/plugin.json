@@ -1,8 +1,21 @@
 {
   "name": "rewind",
-  "version": "0.5.0",
-  "description": "Prep sermons, plan series, and search your church's own preaching corpus through Rewind's MCP — grounded in what your church has actually preached, with verbatim citations. It never changes sermon content; it can save source clips you choose to your private history.",
-  "author": { "name": "Rewind", "url": "https://rewind.church" },
-  "homepage": "https://rewind.church",
-  "keywords": ["sermon", "preaching", "church", "bible", "rewind", "corpus", "mcp"]
+  "version": "0.6.0",
+  "description": "Research your church's recorded teaching through Rewind's ten-tool MCP App. Read exact cited sources, prepare messages, and save chosen clips to your private history without editing sermon content.",
+  "author": {
+    "name": "Rewind",
+    "url": "https://rewind.church"
+  },
+  "homepage": "https://github.com/rewind-church/plugins/blob/main/docs/mcp-setup.md",
+  "keywords": [
+    "sermon",
+    "preaching",
+    "church",
+    "bible",
+    "rewind",
+    "corpus",
+    "mcp"
+  ],
+  "repository": "https://github.com/rewind-church/plugins",
+  "license": "MIT"
 }

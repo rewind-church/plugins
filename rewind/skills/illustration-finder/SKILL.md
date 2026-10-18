@@ -1,63 +1,36 @@
 ---
 name: Illustration finder
-description: Use when someone preparing to preach wants illustrations, stories, or examples for a topic or passage from their church's own preaching — "find illustrations for <topic>", "have we told a story about <theme>", "I need an example for <passage>", "what stories have we used on <topic>". Returns past illustrations with attribution preserved verbatim.
-version: 0.4.0
+description: Use when someone wants stories or illustrations previously told in their church's recorded teaching, with whole available source wording, original attribution, recorded-use facts, and source context.
+version: 0.6.0
 ---
 
 # Illustration finder
 
-Surface illustrations and stories the church has already used, via the Rewind MCP
-tools (`rewind` server). Scoped to this church; no tool can change sermon content.
+Read [the research contract](../../references/research-contract.md) before calling tools. Find stories through Rewind's MCP server. This connection cannot edit sermon content. This workflow needs no paid synthesis.
 
-## How to use
+## Find and read stories
 
-1. For a **topic or passage across sermons**, call `find_illustrations` with
-   `topicOrPassage`. It is free and reads a precomputed story index. Optionally pass
-   `limit` (up to 8), `notToldSince` (YYYY-MM-DD: only stories whose last recorded
-   use predates it), and `filters` (`speaker`, `book`/`chapter`, `topic`,
-   `fromDate`/`toDate`, and `contentKind`, which defaults to weekend `"sermon"`; set
-   `"class"`, `"conference"`, `"midweek"` or `"special"` to search those instead).
-2. For the stories in **one specific sermon**, get its id from `corpus_search`,
-   `search` or `list_recent_sermons`, then call `get_sermon` with
-   `{ "sermonId": "<id>", "include": ["illustrations"] }`. This is also free.
-3. Present each result with **attribution preserved exactly** — the sermon, the
-   timestamp, and **who told it**. When `storyCompleteness` is `"full"`, `storyText`
-   holds the whole story in its original wording; `"excerpt_only"` means only an
-   excerpt is available, so say so.
-4. If helpful, pull the surrounding context with `get_sermon` at the story's moment
-   (`at` in seconds) so the preacher can see how the illustration landed.
+1. For a topic or passage across messages, call `find_illustrations` with `topicOrPassage`. Optional `limit` is at most 8. Use `notToldSince` only when the user requests a recorded-use cutoff. Narrow with `filters`; weekend messages are the default.
+2. For one message, find its ID with `search`, then call `get_sermon` with `include: ["illustrations"]`.
+3. Present the returned teller, title, date, source link, and time when available. Preserve attribution exactly. `storyCompleteness: "full"` means `storyText` contains the whole canonically available story. `"excerpt_only"` means complete source wording is unavailable. Say which you have. Do not shorten a requested whole story into a new synopsis.
+4. Read surrounding original context with `get_sermon` at the returned story moment. If a timestamp or link is withheld, say so. Do not invent one.
 
-For `find_illustrations`, `timesTold` and `lastToldAt` are neutral facts about
-recorded use, not warnings; deliberate reuse can be valuable. Unknown counts or dates
-stay unknown. A `"partial"` state or a `partialReason` means the index was incomplete
-for this request — it is not evidence that no story exists.
+Recorded `timesTold` and `lastToldAt` are neutral facts. Deliberate reuse can be useful. Null counts or dates stay unknown. A `"partial"` state or `partialReason` means this request could not use a complete index or date set. It is not evidence that no story exists.
 
-For `get_sermon`, preserve the distinction between `reasons.illustrations =
-"not_analyzed"` (the sermon has not been analyzed for stories) and an empty
-`parts.illustrations` list (analyzed, none found). Never turn missing analysis into a
-claim that the sermon contains no stories. A null `atSeconds` or `url` means the
-timestamp/link is withheld after a transcript change; do not invent one or present it
-as checked. Preserve each returned excerpt and attribution.
+For a specific message, `reasons.illustrations: "not_analyzed"` is different from an analyzed empty `parts.illustrations` list. Missing analysis is not a finding that the message has no stories.
 
-If the user asks to keep a story, `add_to_chat` saves it (with `sermonId`,
-`startSeconds` and the exact `quote`) to their private history. Only save when asked.
+## Save a chosen story from the transcript
 
-## Costs and errors
+Save only when the user asks. Discuss, reading, and opening never authorize a save.
 
-Both lookups above are free; this skill never needs a paid synthesis. If a tool
-refuses, read its `code`: on `rate_limited`, wait `retryAfterSeconds` (about a minute
-if absent) and retry once; on `daily_limit`, stop and tell the user the token's daily
-request limit is reached (it resets within 24 hours); on `auth_required`, tell the user
-to reconnect Rewind. An error without a `code`: report what it says and don't loop.
+Before any illustration save, call `get_sermon` with its `sermonId`, the returned moment as `at`, and `include: ["transcript"]`. This returns a versioned page. Select exact contiguous wording from `parts.transcriptSegments` and use the original starting segment's `startSeconds`. If the story spans pages, continue with the returned offsets and `transcriptHash`. Preserve the contiguous selected range.
 
-## Rules (critical for illustrations)
+Specific-sermon illustrations return exact bounded `excerpt` text and its actual source `startSeconds`. A separate `excerptTruncated` flag says that more wording follows. The labeled `atSeconds` can differ from the source start. Read the versioned transcript page before choosing the story range. Do not add an omission marker to a quote or use the label's time as the source time. If source wording or timing is unavailable, explain the limitation instead of guessing.
 
-- **Never rewrite a personal story in the first person** for the current preacher. If
-  another speaker told "when my daughter was born…", it stays theirs — attributed,
-  not adopted. Re-attributing someone's personal story to the current preacher is a
-  trust violation.
-- **Attribution is verbatim** — render who told it exactly as returned.
-- **No fabrication.** If the church hasn't used an illustration on the topic, say so;
-  don't invent one and present it as something the church has used.
-- Offer your OWN fresh illustration ideas only when clearly labeled as new
-  suggestions, separate from the cited corpus results.
+Call `add_to_chat` with the selected `sermonId`, source `startSeconds`, and exact `quote`. Keep a stable `requestKey` for retries. Check an uncertain save with `history(requestKey)` before writing again. An empty quote at zero represents a whole-message reference, never a chosen story. Follow the research contract for selection limits, recovery, refusals, and client-data controls.
+
+## Keep attribution intact
+
+Never rewrite another speaker's personal story in the first person for the current preacher. Their experience remains theirs. Keep who told it exactly as returned.
+
+If no usable story is returned, describe the searched scope and limitations. Do not invent a story and call it something the church used. Label any fresh suggestions as your own ideas, separate from recorded source material.
