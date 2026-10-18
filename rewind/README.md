@@ -1,31 +1,33 @@
 # Rewind for Claude
 
-Search your church's recorded teaching, read original context, and prepare a message with cited sources. The plugin selects Rewind's ten-tool MCP App catalog. The connection cannot create, edit, or delete sermon content. It saves selected source clips to your private Rewind history only when you ask.
+Search your church's recorded teaching, read original context, and prepare a message with cited sources. Version 0.6.1 connects through browser sign-in with OAuth and selects Rewind's ten-tool MCP App catalog. The connection cannot create, edit, or delete sermon content. It saves selected source clips to your private Rewind history only when you ask.
 
 ## Connect and install
 
-You need Studio research access in your church's Rewind environment. Supported roles are admin, staff, planter, seminary faculty, and seminary student. An ordinary member account cannot create a token. Ask your church administrator if you cannot open Connections.
+You need Studio research access in your church's Rewind environment. Supported roles are admin, staff, planter, seminary faculty, and seminary student. Ask your church administrator if you cannot open **Studio → Settings → Connections**.
 
-1. Create a personal MCP token in **Studio → Settings → Connections** at `https://<your-church>.rewind.church/studio/settings/connections`.
-2. Set both values in the terminal that launches Claude Code:
+1. Set your church's endpoint in the terminal that launches Claude Code:
 
    ```bash
    export REWIND_MCP_URL="https://<your-church>.rewind.church/api/mcp/mcp"
-   export REWIND_MCP_TOKEN="rwd_mcp_YOUR_TOKEN_HERE"
    ```
 
    `REWIND_MCP_URL` is the canonical endpoint without a query. The plugin appends `?profile=app`. Remove an existing `?profile=...` suffix from this variable before starting the new plugin.
 
-3. Install the plugin:
+2. Install the plugin:
 
    ```bash
    claude plugin marketplace add rewind-church/plugins
    claude plugin install rewind@rewind-church
    ```
 
-4. Start a new Claude Code session from that terminal. Check `/mcp` for `rewind`.
+3. Start `claude` from that terminal and open `/mcp`.
+4. Select the Rewind plugin connection (`plugin:rewind:rewind`) and choose **Authenticate**. Sign in to Rewind in your browser and approve the connection.
+5. Return to Claude Code and check that Rewind is connected with ten tools.
 
-For an existing installation, update the marketplace and Rewind through Claude Code's plugin manager, then restart. The public [setup guide](https://github.com/rewind-church/plugins/blob/main/docs/mcp-setup.md) includes other clients, upgrades, limits, and troubleshooting. This package installs a Claude Code plugin. Other MCP clients require their own connection setup.
+OAuth requires no personal token to create, copy, or export. It must be available in your church's Rewind environment. Personal tokens remain an [optional fallback](https://github.com/rewind-church/plugins/blob/main/docs/mcp-setup.md#use-a-personal-token-as-an-optional-fallback).
+
+For an existing installation, update the marketplace and Rewind through Claude Code's plugin manager, then restart and authenticate. Version 0.6.1 no longer reads `REWIND_MCP_TOKEN`. Follow the [upgrade instructions](https://github.com/rewind-church/plugins/blob/main/docs/mcp-setup.md#upgrade-an-existing-installation) to avoid duplicate connections. The guide also includes other clients, limits, and troubleshooting. This package installs a Claude Code plugin. Other MCP clients require their own connection setup.
 
 ## Use the ten App tools
 

@@ -23,7 +23,6 @@ Object.assign(env, {
   DISABLE_TELEMETRY: "1",
   DISABLE_ERROR_REPORTING: "1",
   REWIND_MCP_URL: "https://fictional-church.invalid/api/mcp/mcp",
-  REWIND_MCP_TOKEN: "fictional-validator-placeholder",
 });
 const cli = path.join(root, "node_modules/.bin/claude");
 const readJson = (file) => JSON.parse(readFileSync(file, "utf8"));
@@ -59,7 +58,7 @@ try {
   const manifest = readJson(path.join(pluginRoot, ".claude-plugin/plugin.json"));
   const mcp = readJson(path.join(pluginRoot, ".mcp.json"));
   assert.deepEqual(Object.keys(mcp.mcpServers), ["rewind"]);
-  assert.deepEqual(mcp.mcpServers.rewind, { type: "http", url: "${REWIND_MCP_URL}?profile=app", headers: { Authorization: "Bearer ${REWIND_MCP_TOKEN}" } });
+  assert.deepEqual(mcp.mcpServers.rewind, { type: "http", url: "${REWIND_MCP_URL}?profile=app" }, "default plugin must discover OAuth without a token or Authorization header");
   assert.equal(readdirSync(path.join(pluginRoot, "skills")).length, 5);
   assert.equal(readdirSync(path.join(pluginRoot, "commands")).filter((name) => name.endsWith(".md")).length, 2);
   assert.match(readFileSync(path.join(pluginRoot, "LICENSE"), "utf8"), /MIT License/);

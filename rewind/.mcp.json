@@ -2,10 +2,7 @@
   "mcpServers": {
     "rewind": {
       "type": "http",
-      "url": "${REWIND_MCP_URL}?profile=app",
-      "headers": {
-        "Authorization": "Bearer ${REWIND_MCP_TOKEN}"
-      }
+      "url": "${REWIND_MCP_URL}?profile=app"
     }
   }
 }
