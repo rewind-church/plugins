@@ -4,40 +4,43 @@ Connect an authorized AI client to your church's recorded teaching. This guide c
 
 ## Check your access
 
-Your church's Rewind environment must offer MCP access, and your account needs Studio research permission. Supported roles are admin, staff, planter, seminary faculty, and seminary student. An ordinary member account cannot create an MCP token. Ask your church administrator about access if you cannot open **Studio → Settings → Connections**.
+Your church's Rewind environment must offer MCP access, and your account needs Studio research permission. Supported roles are admin, staff, planter, seminary faculty, and seminary student. Ask your church administrator about access if you cannot open **Studio → Settings → Connections**.
 
-A token belongs to your own account in one church. Rewind checks your current membership and role on requests. A token does not grant access to another church, unpublished sermon review, or another person's private clips. Keep tokens out of prompts, source control, screenshots, and public issue reports.
+OAuth is the default: sign in with your church account and approve the client in your browser. You do not need to create or export a personal token. A connection belongs to your own account in one church. Rewind checks your current membership and role on requests. It does not grant access to another church, unpublished sermon review, or another person's private clips.
 
 ## Install the Claude Code plugin
 
-1. Open `https://<your-church>.rewind.church/studio/settings/connections`.
-2. Create a personal MCP token with a name and an appropriate daily spending cap. Copy it while it is shown.
-3. Set the endpoint and token in the terminal that launches Claude Code:
+1. Set your church's endpoint in the terminal that launches Claude Code:
 
    ```bash
    export REWIND_MCP_URL="https://<your-church>.rewind.church/api/mcp/mcp"
-   export REWIND_MCP_TOKEN="rwd_mcp_YOUR_TOKEN_HERE"
    ```
 
    Keep the endpoint without a query. The plugin adds `?profile=app` in `.mcp.json`. If you previously stored a URL with a `?profile=...` suffix, remove that suffix from `REWIND_MCP_URL`.
 
-4. Install the marketplace and plugin:
+2. Install the marketplace and plugin:
 
    ```bash
    claude plugin marketplace add rewind-church/plugins
    claude plugin install rewind@rewind-church
    ```
 
-5. Start a new Claude Code session from that terminal. Open `/mcp` and check that `rewind` is connected.
-6. Ask, "What have we preached about anxiety?" You can also use `/rewind:rewind-prep Romans 8` or `/rewind:rewind-lookup What did we preach last week?`.
+3. Start `claude` from that terminal and open `/mcp`.
+4. Select the Rewind plugin connection (`plugin:rewind:rewind`) and choose **Authenticate**.
+5. In the browser, sign in to Rewind with your church account. Review and approve the connection, then return to Claude Code.
+6. Check that Rewind is connected with ten tools. Ask, "What have we preached about anxiety?" You can also use `/rewind:rewind-prep Romans 8` or `/rewind:rewind-lookup What did we preach last week?`.
 
-The plugin contains five skills, two namespaced commands, a shared research reference, its license, and an HTTP MCP configuration. It does not contain your credentials. See [Claude Code's plugin documentation](https://code.claude.com/docs/en/plugins).
+Claude Code stores and refreshes the OAuth credentials for this connection. The plugin contains five skills, two namespaced commands, a shared research reference, its license, and an HTTP MCP configuration with no Authorization header. See [Claude Code's authentication instructions](https://code.claude.com/docs/en/mcp-quickstart#connect-a-server-that-requires-sign-in) and [plugin documentation](https://code.claude.com/docs/en/plugins).
+
+OAuth must be enabled in your church's Rewind environment. If it is unavailable, ask your church administrator or use the [optional personal-token fallback](#use-a-personal-token-as-an-optional-fallback).
 
 ### Upgrade an existing installation
 
-Update the Rewind marketplace and plugin through Claude Code's plugin manager, then restart the session from the terminal containing your environment variables. Version 0.6.0 selects the App profile even if your existing variable contains the previously documented canonical endpoint. Do not append the App query to that variable yourself.
+Update the Rewind marketplace and plugin through Claude Code's plugin manager. Set the query-free `REWIND_MCP_URL`, then start a new session and authenticate the plugin connection through `/mcp`.
 
-Check that the discovered catalog has the ten tools below. If old-only tools remain, confirm that the new plugin is enabled and remove a duplicate manually configured legacy connection. Keep a separate legacy connection only when a compatibility workflow needs it.
+Version 0.6.1 replaces 0.6.0's required personal token with OAuth. It no longer reads `REWIND_MCP_TOKEN`; you can remove that export from your shell setup. If you added a separate token connection, disable that connection in `/mcp` before authenticating the plugin connection. Keep the Rewind plugin enabled so its skills and commands remain available. After OAuth works, revoke an old personal token in Connections only if no other client uses it.
+
+Check that the discovered catalog has the ten tools below. If old-only tools remain, confirm that the updated plugin is enabled and inspect any separate legacy connection. Keep a legacy connection only when a compatibility workflow needs it.
 
 ## Connect other MCP clients
 
@@ -49,12 +52,57 @@ For an App connection entered directly in a client, use the full URL:
 https://<your-church>.rewind.church/api/mcp/mcp?profile=app
 ```
 
-Use the client's custom remote MCP connection flow and sign in with Rewind OAuth when offered. This is a separate client authorization step. A static bearer token can instead be used by clients that support authenticated Streamable HTTP with custom headers. The manual configuration is:
+For Claude web and Claude Desktop, use **Settings → Connectors → Add custom connector**, enter the App URL, and complete the Rewind sign-in. For ChatGPT, use its custom MCP connection flow and choose OAuth. Availability and labels depend on your client plan and organization settings. Installing the Claude Code plugin does not authorize these separate clients.
+
+For clients that accept Claude-style HTTP MCP configuration, the OAuth configuration has no credential header:
 
 ```json
 {
   "mcpServers": {
     "rewind": {
+      "type": "http",
+      "url": "https://YOUR-CHURCH.rewind.church/api/mcp/mcp?profile=app"
+    }
+  }
+}
+```
+
+This JSON describes the Claude Code HTTP server shape. It is not a Claude Desktop Developer configuration. Use Claude Desktop's remote connector flow above. Other clients may use different configuration keys; follow their documentation.
+
+The transport is Streamable HTTP, not an old SSE endpoint. Do not add `/sse`. An App-compatible host may render interactive results. Other hosts can use the returned text and structured source data. Tool discovery and text output alone do not prove that a particular native host renders or operates the App correctly.
+
+For the current client setup flow, consult [Claude's connector guide](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp) or [OpenAI's custom MCP server guide](https://developers.openai.com/api/docs/guides/custom-mcp-server). Your client can ask you to approve tool calls as well as authorize the connection.
+
+## Use a personal token as an optional fallback
+
+Use this path when your client cannot use OAuth or your Rewind environment has not enabled it. A personal token is not required for the default plugin connection.
+
+1. Open **Studio → Settings → Connections** at `https://<your-church>.rewind.church/studio/settings/connections`.
+2. Under the personal-token fallback, create a token with a name and an appropriate daily spending cap. Copy it while it is shown.
+3. In Claude Code, open `/mcp`, select `plugin:rewind:rewind`, and choose **Disable** for that connection. Keep the Rewind plugin itself enabled. This preserves its skills and commands without leaving two Rewind connections active.
+4. Exit the session. In Bash or zsh, add a separate token connection. The `read` command asks for the token without putting its value in shell history:
+
+   ```bash
+   printf 'Rewind token: '
+   read -r -s REWIND_MCP_TOKEN
+   printf '\n'
+   claude mcp add --transport http --scope user rewind-token \
+     "${REWIND_MCP_URL}?profile=app" \
+     --header "Authorization: Bearer $REWIND_MCP_TOKEN"
+   unset REWIND_MCP_TOKEN
+   claude
+   ```
+
+   Use the same query-free `REWIND_MCP_URL` from the install instructions. Claude Code stores this manual connection and its header in your local configuration.
+
+5. In `/mcp`, check that `rewind-token` is connected and the plugin's OAuth connection is disabled. When using another project, check those states again because connection enablement can be project-specific.
+
+For another client with custom header support, use the full App URL and `Authorization: Bearer YOUR_PERSONAL_REWIND_TOKEN`. The equivalent Claude-style configuration is:
+
+```json
+{
+  "mcpServers": {
+    "rewind-token": {
       "type": "http",
       "url": "https://YOUR-CHURCH.rewind.church/api/mcp/mcp?profile=app",
       "headers": {
@@ -65,11 +113,9 @@ Use the client's custom remote MCP connection flow and sign in with Rewind OAuth
 }
 ```
 
-This JSON describes the Claude HTTP server shape. Other clients may use different configuration keys. Use your client's documentation rather than pasting this into an unrelated configuration file. Never share a configuration containing a real token.
+Use the client's own configuration format. Keep actual tokens out of prompts, source control, screenshots, and public issue reports.
 
-The transport is Streamable HTTP, not an old SSE endpoint. Do not add `/sse`. An App-compatible host may render interactive results. Other hosts can use the returned text and structured source data. Tool discovery and text output alone do not prove that a particular native host renders or operates the App correctly.
-
-For the current client setup flow, consult [Claude's connector guide](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp) or [OpenAI's custom MCP server guide](https://developers.openai.com/api/docs/guides/custom-mcp-server). Your client can ask you to approve tool calls as well as authorize the connection.
+To return to OAuth, disable the manual token connection, enable the plugin's connection in `/mcp`, and choose **Authenticate**. Revoke the old token in Rewind Connections when no other client uses it. Disconnecting OAuth does not revoke a separate personal token, and revoking that token does not disconnect OAuth.
 
 ## Use the App catalog
 
@@ -130,14 +176,16 @@ Each credential has a burst limit, a daily request limit, and a daily spending c
 | --- | --- |
 | `rate_limited` | Wait `retryAfterSeconds`, then retry the same call once. If absent, wait about a minute. Stop if it is refused again. |
 | `daily_limit` | Stop calling tools. The daily request window resets within 24 hours. |
-| `auth_required` or HTTP 401 | Reconnect with your own authorized account, or replace your revoked or expired token. Check that environment variables reached the process. |
+| `auth_required` or HTTP 401 | For OAuth, select the plugin connection in `/mcp` and authenticate again with your own account. For the optional token connection, replace your revoked or expired token. |
 | Invalid field or unknown key | Correct the named input. Preserve the requested scope. |
 | `retryable: false` or a refusal without a `code` | Read the message, correct a named issue, and do not loop. |
 | HTTP 404 on the App URL | Check the church URL and ask Rewind whether MCP App access is available for that environment. |
 
 Do not blindly repeat a confirmed synthesis after an uncertain failure. It may already have spent allowance. An explicit `rate_limited` refusal permits the single delayed retry above. Never mint credentials to evade request or spending limits.
 
-If the plugin is installed but MCP fails to connect, check both environment variables in the terminal that starts Claude Code, the query-free endpoint, token expiry or revocation, and your current Studio access. Restart after changing environment variables. Do not print or post the token while diagnosing the issue.
+If the plugin is installed but MCP fails to connect, check the query-free `REWIND_MCP_URL` in the terminal that starts Claude Code, your current Studio access, and whether OAuth is enabled in your Rewind environment. Restart after changing the URL. A status of **Needs authentication** means you must select the connection in `/mcp` and choose **Authenticate**. An old exported personal token does not authenticate version 0.6.1's default connection.
+
+Native sign-in returns to Claude Code through a local loopback callback. If the browser cannot return, keep Claude Code running and check whether your computer allows its local callback listener. Do not enable insecure-issuer settings on a production server to work around a callback failure. For the optional token connection, check its saved header and token expiry or revocation without printing the secret.
 
 ## Compatibility and Deep Research
 

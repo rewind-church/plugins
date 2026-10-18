@@ -2,33 +2,34 @@
 
 Connect [Claude Code](https://code.claude.com/docs/en/plugins) to your church's recorded teaching through [Rewind](https://rewind.church).
 
-This repository is the official Rewind plugin marketplace. Version 0.6.0 selects the newer ten-tool MCP App catalog and includes five skills and two commands. Rewind cannot create, edit, or delete sermon content through this connection. It can save source clips you choose to your private Rewind history.
+This repository is the official Rewind plugin marketplace. Version 0.6.1 uses browser sign-in with OAuth and the ten-tool MCP App catalog. It includes five skills and two commands. Rewind cannot create, edit, or delete sermon content through this connection. It can save source clips you choose to your private Rewind history.
 
 ## Install
 
-You need access to Studio research in your church's Rewind environment. The supported roles are admin, staff, planter, seminary faculty, and seminary student. An ordinary member account cannot create a token. Ask your church administrator about access if you cannot open Connections.
+You need access to Studio research in your church's Rewind environment. The supported roles are admin, staff, planter, seminary faculty, and seminary student. Ask your church administrator about access if you cannot open **Studio → Settings → Connections**.
 
-1. Open **Studio → Settings → Connections** at `https://<your-church>.rewind.church/studio/settings/connections`.
-2. Create a personal MCP token and copy it while it is shown.
-3. Set the endpoint and token in the terminal that launches Claude Code:
+1. Set your church's endpoint in the terminal that launches Claude Code:
 
    ```bash
    export REWIND_MCP_URL="https://<your-church>.rewind.church/api/mcp/mcp"
-   export REWIND_MCP_TOKEN="rwd_mcp_YOUR_TOKEN_HERE"
    ```
 
    Keep `REWIND_MCP_URL` query-free. The plugin appends `?profile=app` itself. If you previously added a `?profile=...` suffix to this variable, remove that suffix before starting Claude Code.
 
-4. Add the marketplace and install the plugin:
+2. Add the marketplace and install the plugin:
 
    ```bash
    claude plugin marketplace add rewind-church/plugins
    claude plugin install rewind@rewind-church
    ```
 
-5. Start a new Claude Code session from that terminal. Check `/mcp` for the `rewind` connection, then ask, "What have we preached about anxiety?"
+3. Start `claude` from that terminal and open `/mcp`.
+4. Select the Rewind plugin connection (`plugin:rewind:rewind`) and choose **Authenticate**. Sign in to Rewind in your browser and approve the connection.
+5. Return to Claude Code and check that Rewind is connected with ten tools. Ask, "What have we preached about anxiety?"
 
-For an existing installation, update this marketplace and the Rewind plugin through Claude Code's plugin manager, then restart the session. The [setup guide](./docs/mcp-setup.md) covers upgrades, other clients, authentication, limits, and troubleshooting.
+You do not need to create, copy, or export a personal token for this flow. OAuth must be available in your church's Rewind environment. Personal tokens remain an [optional fallback](./docs/mcp-setup.md#use-a-personal-token-as-an-optional-fallback) for clients or environments without OAuth.
+
+For an existing installation, update this marketplace and the Rewind plugin through Claude Code's plugin manager, then restart and authenticate. Version 0.6.1 no longer reads `REWIND_MCP_TOKEN`. The [upgrade instructions](./docs/mcp-setup.md#upgrade-an-existing-installation) explain how to replace a 0.6.0 token connection without leaving duplicate connections active.
 
 ## Included workflows
 
@@ -53,7 +54,7 @@ Research results can render an interactive App in a compatible host. A client th
 
 ## Permissions, cost, and data
 
-Each request uses your current church membership and permissions. Tokens have request and spending limits and can be revoked from Connections. A clip belongs to your account in that church. Reading or discussing a source does not save it.
+Each request uses your current church membership and permissions. OAuth connections and optional personal tokens have request and spending limits and can be revoked from Connections. A clip belongs to your account in that church. Reading or discussing a source does not save it.
 
 Retrieval, stored artifacts, illustrations, and source evidence use no metered Rewind synthesis. Searches can use query embeddings. Optional Rewind-written synthesis from `ask` or `trace_theme` uses your church's metered allowance only after your explicit confirmation. Credit amounts and balances may be unavailable. Your Claude subscription or API costs are separate.
 
