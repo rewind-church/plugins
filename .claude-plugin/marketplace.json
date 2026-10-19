@@ -6,7 +6,7 @@
   },
   "metadata": {
     "description": "Official Rewind plugins for Claude. Research your church's recorded teaching with exact citations and the ten-tool MCP App.",
-    "version": "0.6.1"
+    "version": "0.6.2"
   },
   "plugins": [
     {

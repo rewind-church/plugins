@@ -1,12 +1,38 @@
 # Connect Rewind to an AI client
 
-Connect an authorized AI client to your church's recorded teaching. This guide covers the Claude Code plugin and remote MCP clients. Rewind's ten-tool App catalog returns cited sources and can display interactive research results in a compatible host.
+Connect an authorized AI client to your church's recorded teaching. This guide covers the Claude Desktop and Claude Code plugin, plus remote MCP clients. Rewind's ten-tool App catalog returns cited sources and can display interactive research results in a compatible host.
 
 ## Check your access
 
 Your church's Rewind environment must offer MCP access, and your account needs Studio research permission. Supported roles are admin, staff, planter, seminary faculty, and seminary student. Ask your church administrator about access if you cannot open **Studio → Settings → Connections**.
 
 OAuth is the default: sign in with your church account and approve the client in your browser. You do not need to create or export a personal token. A connection belongs to your own account in one church. Rewind checks your current membership and role on requests. It does not grant access to another church, unpublished sermon review, or another person's private clips.
+
+## Install in Claude Desktop
+
+1. From Home, open **Customize → Plugins → Add plugin**.
+2. Open **Manage marketplaces** and add `rewind-church/plugins`. If it is already listed, sync it to load the current version.
+3. Find Rewind and choose **Add**. Open the connection setup and replace the URL placeholder with your church's full App endpoint:
+
+   ```text
+   https://<your-church>.rewind.church/api/mcp/mcp?profile=app
+   ```
+
+4. Choose **Sign in**. In your browser, sign in to Rewind with the intended church account, review the requested connection, and approve it.
+5. The browser returns you to Claude Desktop automatically. Allow its native-app handoff if prompted. Confirm the connection shows ten tools.
+6. Ask for recent sermons, then open a returned source to check the interactive App and its source link.
+
+No terminal exports, personal token, or Authorization header are needed. The plugin installs its skills and commands alongside the connection. If a separate older Rewind connector is enabled, disable it in the test chat to keep catalogs distinct. Do not revoke a credential used by another client. Client labels, plugins and remote connector availability depend on version, plan and organization settings. See [Claude's plugin guide](https://support.claude.com/en/articles/13837440-use-plugins-in-claude).
+
+To update, sync the marketplace and update Rewind in the plugin manager. Existing OAuth authorization can remain valid; reconnect if the client requests it.
+
+If Claude says **A connector with this URL already exists in your organization**,
+cancel the duplicate setup. Open **Customize → Connectors → Yours**, select the
+existing Rewind connector, and confirm its complete URL ends in
+`/api/mcp/mcp?profile=app` and it shows ten tools. Use that connection and keep the
+Rewind plugin enabled for its skills and commands. The plugin's placeholder-based
+connector card can still say **Not added**; check the actual connector entry's
+connection state. Do not disconnect a working connector just to clear that label.
 
 ## Install the Claude Code plugin
 
@@ -44,7 +70,7 @@ Check that the discovered catalog has the ten tools below. If old-only tools rem
 
 ## Connect other MCP clients
 
-This repository distributes a Claude Code plugin. Claude web, Claude Desktop, ChatGPT, and other clients each require their own remote MCP setup. Availability depends on your client plan and organization settings. Installing the plugin does not register a native ChatGPT plugin.
+This repository distributes a Claude plugin. Claude Desktop's native installation is above. Claude web, a Desktop installation without plugin support, ChatGPT, and other clients can use their own remote MCP setup. Availability depends on your client plan and organization settings. Installing the plugin does not register a native ChatGPT plugin.
 
 For an App connection entered directly in a client, use the full URL:
 
@@ -146,7 +172,11 @@ Carry the returned scope into each claim. Source links, title, date, speaker, Sc
 
 Long transcripts page. To continue, send `parts.transcriptPage.nextOffset` as `offset`, `nextSegmentOffset` as `segmentOffset`, and the same `transcriptHash`. Omit `at` when using those absolute continuation cursors. If the source changes, load it again rather than combining versions. `rangeExhausted` means the requested stored range ended. It does not mean earlier pages were read. A segment timestamp is not a word-level timestamp. The App's continuation control keeps pages in one reader; independent conversation calls may create separate host panels.
 
-Discuss brings selected source material into the conversation. It does not save to private history. Choose Save or explicitly ask the assistant to save when you want a private clip. Opening or reading a source is not a save request.
+**Discuss selected** uses only checked, displayed sources. Its brief request includes attributed wording previews, or it sends a readable fallback of at most 6,000 characters. Short quotations travel in the request itself; additional host context is supplementary. Shortened previews and omitted sources are labeled. It does not load other transcripts automatically, save to private history, or start metered Rewind synthesis. Clearing all source checkboxes disables the action. A metadata reference has no quotation and is labeled as a reference.
+
+Choose **Save** or explicitly ask the assistant to save when you want a private clip. Opening or reading a source is not a save request. Open **View Saved research** in the App, or open **Saved → Research** in Rewind (`/my#research`), to find your saves. This account-wide list labels each church; the `history` tool remains scoped to its connected church. Use Earlier research for older pages and Newest research to return.
+
+Each item has a **Remove** control with confirmation. It deletes the saved quotation or reference. A source or access change withholds the content but leaves your receipt removable. Rewind keeps retry metadata, with the removed item's private topic cleared, so an old request cannot restore the deleted save. A new deliberate Save needs a new request key. Disconnecting a client does not delete history or that client's copies.
 
 Before saving an illustration, fetch a versioned transcript page at its returned moment with `get_sermon`. Use exact contiguous wording from `parts.transcriptSegments` and the original starting segment's `startSeconds`. Continue if needed for the selected story. Specific-sermon illustrations return exact bounded `excerpt` text, its actual source `startSeconds`, and a separate `excerptTruncated` flag when more wording follows. The labeled `atSeconds` can differ from that source start. Read the versioned page to select the full story or a smaller clip. Do not add omission markers or substitute the labeled time for the source time. Withheld timing or source text cannot be filled in by guessing.
 

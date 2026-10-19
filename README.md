@@ -1,12 +1,21 @@
 # Rewind plugins for Claude
 
-Connect [Claude Code](https://code.claude.com/docs/en/plugins) to your church's recorded teaching through [Rewind](https://rewind.church).
+Connect Claude Desktop or [Claude Code](https://code.claude.com/docs/en/plugins) to your church's recorded teaching through [Rewind](https://rewind.church).
 
-This repository is the official Rewind plugin marketplace. Version 0.6.1 uses browser sign-in with OAuth and the ten-tool MCP App catalog. It includes five skills and two commands. Rewind cannot create, edit, or delete sermon content through this connection. It can save source clips you choose to your private Rewind history.
+This repository is the official Rewind plugin marketplace. Version 0.6.2 uses browser sign-in with OAuth and the ten-tool MCP App catalog. It includes five skills and two commands. Rewind cannot create, edit, or delete sermon content through this connection. It can save source clips you choose to your private Rewind history, visible in Saved under Research.
 
-## Install
+## Install in Claude Desktop
 
 You need access to Studio research in your church's Rewind environment. The supported roles are admin, staff, planter, seminary faculty, and seminary student. Ask your church administrator about access if you cannot open **Studio → Settings → Connections**.
+
+1. From Home, open **Customize → Plugins → Add plugin**. Use **Manage marketplaces** to add `rewind-church/plugins`, or sync it if already present.
+2. Find Rewind and choose **Add**. In connection setup, replace the URL placeholder with `https://<your-church>.rewind.church/api/mcp/mcp?profile=app`.
+3. Choose **Sign in**, approve Rewind in your browser, and return through the automatic Claude Desktop callback. Allow the browser's native-app handoff if prompted.
+4. Check that the connection has ten tools. Ask for recent sermons and open a result to try the interactive App.
+
+This flow needs no terminal exports, personal token, or Authorization header. For an existing installation, sync the marketplace and update Rewind. Client labels and availability can vary by version and plan. See the [full setup guide](./docs/mcp-setup.md#install-in-claude-desktop).
+
+## Install in Claude Code
 
 1. Set your church's endpoint in the terminal that launches Claude Code:
 
@@ -29,7 +38,7 @@ You need access to Studio research in your church's Rewind environment. The supp
 
 You do not need to create, copy, or export a personal token for this flow. OAuth must be available in your church's Rewind environment. Personal tokens remain an [optional fallback](./docs/mcp-setup.md#use-a-personal-token-as-an-optional-fallback) for clients or environments without OAuth.
 
-For an existing installation, update this marketplace and the Rewind plugin through Claude Code's plugin manager, then restart and authenticate. Version 0.6.1 no longer reads `REWIND_MCP_TOKEN`. The [upgrade instructions](./docs/mcp-setup.md#upgrade-an-existing-installation) explain how to replace a 0.6.0 token connection without leaving duplicate connections active.
+For an existing installation, update this marketplace and the Rewind plugin through Claude Code's plugin manager, then restart and authenticate. Versions 0.6.1 and later do not read `REWIND_MCP_TOKEN`. The [upgrade instructions](./docs/mcp-setup.md#upgrade-an-existing-installation) explain how to replace a 0.6.0 token connection without leaving duplicate connections active.
 
 ## Included workflows
 
@@ -50,7 +59,7 @@ The plugin uses these ten App tools:
 
 The five skills are Sermon prep, Corpus lookup, Study brief, Series planner, and Illustration finder. Use plain language or invoke `/rewind:rewind-prep` and `/rewind:rewind-lookup`. See the [plugin README](./rewind/README.md) for examples.
 
-Research results can render an interactive App in a compatible host. A client that does not render MCP Apps can still receive supported tool text and structured results. Installing this Claude Code plugin does not install a native ChatGPT plugin or prove that a particular host supports the App interface. See [other-client setup](./docs/mcp-setup.md#connect-other-mcp-clients).
+Research results can render an interactive App in a compatible host. Discuss selected respects the checked sources and keeps its request brief, with attributed wording previews and explicit shortening or omission labels. Save puts a reference or quotation in **Saved → Research** in Rewind, with church labels and removal controls. Reading and discussing do not save. A client that does not render MCP Apps can still receive supported tool text and structured results. Installing this plugin does not install a native ChatGPT plugin or prove a host's behavior. See [other-client setup](./docs/mcp-setup.md#connect-other-mcp-clients).
 
 ## Permissions, cost, and data
 

@@ -1,10 +1,26 @@
 # Rewind for Claude
 
-Search your church's recorded teaching, read original context, and prepare a message with cited sources. Version 0.6.1 connects through browser sign-in with OAuth and selects Rewind's ten-tool MCP App catalog. The connection cannot create, edit, or delete sermon content. It saves selected source clips to your private Rewind history only when you ask.
+Search your church's recorded teaching, read original context, and prepare a message with cited sources. Version 0.6.2 connects through browser sign-in with OAuth and selects Rewind's ten-tool MCP App catalog. The connection cannot create, edit, or delete sermon content. It saves selected source clips to your private Rewind history only when you ask.
 
 ## Connect and install
 
 You need Studio research access in your church's Rewind environment. Supported roles are admin, staff, planter, seminary faculty, and seminary student. Ask your church administrator if you cannot open **Studio → Settings → Connections**.
+
+### Claude Desktop
+
+1. From Home, open **Customize → Plugins → Add plugin**. In **Manage marketplaces**, add `rewind-church/plugins`, or sync that marketplace if already listed.
+2. Find Rewind and choose **Add**. Open its connection setup and replace the URL placeholder with your church's complete App endpoint:
+
+   ```text
+   https://<your-church>.rewind.church/api/mcp/mcp?profile=app
+   ```
+
+3. Choose **Sign in** and approve the Rewind connection in your browser. The browser returns you to Claude Desktop automatically; allow the native-app handoff if your browser asks.
+4. Confirm the connection has ten tools. Ask for recent sermons and open a result to check the interactive App.
+
+No terminal exports, personal token, or Authorization header are needed in this flow. For an existing installation, sync the marketplace and update Rewind. If an older, separate Rewind connector is also enabled, disable it in the test chat so its tool catalog cannot be confused with this plugin. Client labels and availability can vary by version and plan; the [setup guide](https://github.com/rewind-church/plugins/blob/main/docs/mcp-setup.md) also covers remote connectors.
+
+### Claude Code
 
 1. Set your church's endpoint in the terminal that launches Claude Code:
 
@@ -27,7 +43,7 @@ You need Studio research access in your church's Rewind environment. Supported r
 
 OAuth requires no personal token to create, copy, or export. It must be available in your church's Rewind environment. Personal tokens remain an [optional fallback](https://github.com/rewind-church/plugins/blob/main/docs/mcp-setup.md#use-a-personal-token-as-an-optional-fallback).
 
-For an existing installation, update the marketplace and Rewind through Claude Code's plugin manager, then restart and authenticate. Version 0.6.1 no longer reads `REWIND_MCP_TOKEN`. Follow the [upgrade instructions](https://github.com/rewind-church/plugins/blob/main/docs/mcp-setup.md#upgrade-an-existing-installation) to avoid duplicate connections. The guide also includes other clients, limits, and troubleshooting. This package installs a Claude Code plugin. Other MCP clients require their own connection setup.
+For an existing installation, update the marketplace and Rewind through Claude Code's plugin manager, then restart and authenticate. Versions 0.6.1 and later do not read `REWIND_MCP_TOKEN`. Follow the [upgrade instructions](https://github.com/rewind-church/plugins/blob/main/docs/mcp-setup.md#upgrade-an-existing-installation) to avoid duplicate connections. Other MCP clients require their own connection setup.
 
 ## Use the ten App tools
 
@@ -65,7 +81,11 @@ Every corpus claim needs its returned title, date, speaker, source link, and tim
 
 Long transcripts page. Continue `get_sermon` with `parts.transcriptPage.nextOffset` as `offset`, `nextSegmentOffset` as `segmentOffset`, and the same `transcriptHash`. A final page does not mean earlier pages were read. The App's continuation control keeps pages in one reader, while separate conversation tool calls may open separate host panels.
 
-Discuss uses the selected material in the conversation. It does not save a clip. To save a story, first read a versioned transcript page at its returned moment. Use exact contiguous wording from `parts.transcriptSegments` and its original `startSeconds`. Specific-sermon illustrations return exact bounded `excerpt` text, its source `startSeconds`, and a separate `excerptTruncated` flag. The labeled `atSeconds` can differ from the source start. Read the source page before choosing the full story or a smaller contiguous clip. Do not add an omission marker to the quote. An empty quote at zero is a whole-sermon reference, never a substitute for a requested quotation.
+**Discuss selected** uses only checked sources. Its brief request includes source labels and selected wording previews, so short quotations reach the conversation even if the host cannot expose additional App context. Shortened previews and omitted sources are labeled. A host without context support receives a readable fallback of up to 6,000 characters. Discuss neither saves nor automatically opens transcripts. Clear every checkbox to disable it. A sermon reference has no quotation attached and is labeled accordingly.
+
+**Save** keeps the chosen reference or quotation in **Saved → Research** in Rewind (`/my#research`). The App's **View Saved research** link opens that section. Items identify their church and can be removed there, including receipts whose source or access is no longer available. Disconnecting the client does not delete history. Removing a save deletes its stored quotation/reference; minimal operation metadata remains to prevent an old retry from restoring it. A new deliberate save uses a new request key.
+
+To save a story, first read a versioned transcript page at its returned moment. Use exact contiguous wording from `parts.transcriptSegments` and its original `startSeconds`. Specific-sermon illustrations return exact bounded `excerpt` text, its source `startSeconds`, and a separate `excerptTruncated` flag. The labeled `atSeconds` can differ from the source start. Read the source page before choosing the full story or a smaller contiguous clip. Do not add an omission marker to the quote. An empty quote at zero is a whole-sermon reference, never a substitute for a requested quotation.
 
 A timed-out save may have succeeded. Keep the same selection and `requestKey` on retries, or call `history` with that key alone to check without writing. See the [source and recovery reference](https://github.com/rewind-church/plugins/blob/main/docs/mcp-setup.md#read-and-save-exact-sources).
 
