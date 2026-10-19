@@ -59,7 +59,7 @@ The plugin uses these ten App tools:
 
 The five skills are Sermon prep, Corpus lookup, Study brief, Series planner, and Illustration finder. Use plain language or invoke `/rewind:rewind-prep` and `/rewind:rewind-lookup`. See the [plugin README](./rewind/README.md) for examples.
 
-Research results can render an interactive App in a compatible host. Discuss selected respects the checked sources and keeps its request brief. Save puts a reference or quotation in **Saved → Research** in Rewind, with church labels and removal controls. Reading and discussing do not save. A client that does not render MCP Apps can still receive supported tool text and structured results. Installing this plugin does not install a native ChatGPT plugin or prove a host's behavior. See [other-client setup](./docs/mcp-setup.md#connect-other-mcp-clients).
+Research results can render an interactive App in a compatible host. Discuss selected respects the checked sources and keeps its request brief, with attributed wording previews and explicit shortening or omission labels. Save puts a reference or quotation in **Saved → Research** in Rewind, with church labels and removal controls. Reading and discussing do not save. A client that does not render MCP Apps can still receive supported tool text and structured results. Installing this plugin does not install a native ChatGPT plugin or prove a host's behavior. See [other-client setup](./docs/mcp-setup.md#connect-other-mcp-clients).
 
 ## Permissions, cost, and data
 
