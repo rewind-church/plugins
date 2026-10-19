@@ -24,13 +24,15 @@ Long transcripts page. Pass `parts.transcriptPage.nextOffset` as `offset`, `next
 
 ## Discuss and save have different effects
 
-Discuss brings selected original material and its attribution into the conversation. Reading, opening, or discussing a source never authorizes a save. Do not call `add_to_chat` for Discuss or inferred interest.
+Discuss uses only the sources the user selected. Its brief request is accompanied by bounded source context when the host supports it, or a readable bounded fallback. Preserve partial-source labels and attribution. Discussing a metadata reference does not mean its transcript was read; fetch original wording only when needed for the user's question. Never expand a reference into every transcript automatically. Reading, opening, or discussing a source never authorizes a save. Do not call `add_to_chat` for Discuss or inferred interest.
 
 Only after the user asks to save, obtain exact source wording. For an illustration, first call `get_sermon` at its returned moment with `include: ["transcript"]` to obtain a versioned source page. Use contiguous wording from `parts.transcriptSegments` and the original starting segment's `startSeconds`. Fetch continuation when the selected story exceeds the page. Specific-sermon illustrations return exact bounded `excerpt` text, its source `startSeconds`, and a separate `excerptTruncated` flag. The labeled `atSeconds` can differ from that source start. Do not add omission markers, join noncontiguous snippets, paraphrase a quote, or substitute a label's time for its source time. If timing is withheld, explain that limitation instead of guessing.
 
 `add_to_chat` accepts `items`, 1–6 objects with `sermonId`, `startSeconds`, and `quote`. A quote can contain up to 50,000 characters, with a 120,000-character total selection cap. An empty quote at zero is only a deliberate whole-sermon reference. Never substitute it for a selected quote. Preserve the title, date, speaker, passages, and source link in the conversation too. Do not claim that a save receipt proves a separate host message was displayed.
 
 Use a stable `requestKey` for a deliberate selection. A timeout does not prove failure. Retry the same selection and key, or call `history` with `requestKey` alone to check without writing. An identical unkeyed retry replays its earlier save; use the returned `operation.requestKey` for recovery. Use a fresh key only for a new selection. For history pages, pass `nextBefore` unchanged as `before` when `hasMore` is true. Unavailable or changed source wording stays withheld.
+
+Saved sources also appear in **Saved → Research** in Rewind (`/my#research`), with church attribution and Remove controls. The history tool stays scoped to the connected church; Saved can list the account's own receipts across churches. Empty wording is a sermon reference, not an unverified quotation. A source or access change withholds its content but leaves its own receipt removable. Removing a save deletes its saved quotation/reference and clears its private topic from operation metadata. Retry metadata remains to prevent an old request from restoring the item. If recovery reports it unavailable, do not recreate it with a fresh key without a new explicit Save request. Disconnecting a client does not delete history or the client's copies.
 
 ## Cost and request limits
 
