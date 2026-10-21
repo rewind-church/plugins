@@ -2,7 +2,7 @@
 
 Connect Claude Desktop or [Claude Code](https://code.claude.com/docs/en/plugins) to your church's recorded teaching through [Rewind](https://rewind.church).
 
-This repository is the official Rewind plugin marketplace. Version 0.6.2 uses browser sign-in with OAuth and the ten-tool MCP App catalog. It includes five skills and two commands. Rewind cannot create, edit, or delete sermon content through this connection. It can save source clips you choose to your private Rewind history, visible in Saved under Research.
+This repository is the official Rewind plugin marketplace. Version 0.6.3 uses browser sign-in with OAuth and the ten-tool MCP App catalog. It includes five skills and two commands. Rewind cannot create, edit, or delete sermon content through this connection. It can save source clips you choose to your private Rewind history, visible in Saved under Research.
 
 ## Install in Claude Desktop
 
