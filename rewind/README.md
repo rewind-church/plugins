@@ -1,6 +1,6 @@
 # Rewind for Claude
 
-Search your church's recorded teaching, read original context, and prepare a message with cited sources. Version 0.6.2 connects through browser sign-in with OAuth and selects Rewind's ten-tool MCP App catalog. The connection cannot create, edit, or delete sermon content. It saves selected source clips to your private Rewind history only when you ask.
+Search your church's recorded teaching, read original context, and prepare a message with cited sources. Version 0.6.3 connects through browser sign-in with OAuth and selects Rewind's ten-tool MCP App catalog. The connection cannot create, edit, or delete sermon content. It saves selected source clips to your private Rewind history only when you ask.
 
 ## Connect and install
 
@@ -94,6 +94,8 @@ A timed-out save may have succeeded. Keep the same selection and `requestKey` on
 Retrieval and stored artifacts use no metered Rewind synthesis. Search and source evidence can use query embeddings. Optional synthesis uses your church's metered allowance only after you confirm the disclosure for that request. `ask` takes `synthesize: true`; `trace_theme` takes `deep: true`. The skills first request the disclosure without `spendConfirmed`, then wait for your explicit yes. Exact credit cost and account balance may be unavailable. Your Claude subscription or API costs are separate.
 
 Draft-overlap checks may send up to three 500-character excerpts to OpenAI for embeddings on a cache miss. This path does not persist draft text. Derived vectors use hashed cache keys with a configurable 24-hour default. Material in Claude or another chosen client is also subject to that client's training, Memory, retention, and sharing controls.
+
+Rewind keeps a content-free record of each call (which tool, when, through which client and church, whether it worked, how long it took, and whether it used a paid AI model) for 90 days. It never contains your question or the result, and your church's administrators do not see it.
 
 Tokens have burst limits, daily request limits, and daily spending caps. On `rate_limited`, wait `retryAfterSeconds` and retry once. On `daily_limit`, stop. On `auth_required`, reconnect with your own authorized account. Report other refusals without looping. Do not blindly repeat a confirmed synthesis after an uncertain failure.
 
