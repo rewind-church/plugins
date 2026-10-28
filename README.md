@@ -2,7 +2,7 @@
 
 Connect Claude Desktop or [Claude Code](https://code.claude.com/docs/en/plugins) to your church's recorded teaching through [Rewind](https://rewind.church).
 
-This repository is the official Rewind plugin marketplace. Version 0.6.2 uses browser sign-in with OAuth and the ten-tool MCP App catalog. It includes five skills and two commands. Rewind cannot create, edit, or delete sermon content through this connection. It can save source clips you choose to your private Rewind history, visible in Saved under Research.
+This repository is the official Rewind plugin marketplace. Version 0.6.3 uses browser sign-in with OAuth and the ten-tool MCP App catalog. It includes five skills and two commands. Rewind cannot create, edit, or delete sermon content through this connection. It can save source clips you choose to your private Rewind history, visible in Saved under Research.
 
 ## Install in Claude Desktop
 
@@ -67,7 +67,7 @@ Each request uses your current church membership and permissions. OAuth connecti
 
 Retrieval, stored artifacts, illustrations, and source evidence use no metered Rewind synthesis. Searches can use query embeddings. Optional Rewind-written synthesis from `ask` or `trace_theme` uses your church's metered allowance only after your explicit confirmation. Credit amounts and balances may be unavailable. Your Claude subscription or API costs are separate.
 
-Draft-overlap checks may send up to three 500-character draft excerpts to OpenAI for embeddings on a cache miss. This path does not persist the draft text. Derived vectors use hashed cache keys with a configurable 24-hour default. Your chosen AI client's own training, Memory, retention, and sharing controls also apply to material you send to that client. Read the [data and cost reference](./docs/mcp-setup.md#understand-cost-and-data-use).
+Draft-overlap checks may send up to three 500-character draft excerpts to OpenAI for embeddings on a cache miss. This path does not persist the draft text. Derived vectors use hashed cache keys with a configurable 24-hour default. Your chosen AI client's own training, Memory, retention, and sharing controls also apply to material you send to that client. Rewind keeps a content-free record of each call for 90 days, without your question or the result; your church's administrators do not see it, but can see what a paid answer cost as Studio spend. Read the [data and cost reference](./docs/mcp-setup.md#understand-cost-and-data-use).
 
 ## Planning Center
 

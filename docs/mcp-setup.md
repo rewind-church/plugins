@@ -196,6 +196,8 @@ Retrieval, stored artifacts, precomputed stories, and source evidence use no met
 
 For draft overlap, a cache miss may send up to three 500-character draft excerpts to OpenAI for embeddings. This path does not persist draft text. Derived vectors use hashed cache keys with a configurable 24-hour default. That default is not an unconditional retention maximum.
 
+Rewind keeps a content-free record of each tool call and resource read: which tool, when, through which client and church, whether it worked, how long it took, and whether it used a paid AI model. It never contains your question or the result. Rewind's platform operators use it to run, secure, and support the service; your church's administrators do not see it. It is kept 90 days and deleted with your account, or with the church it was made in. What a paid answer cost is kept in Rewind's Studio spend records, which your church's administrators can see.
+
 Your AI client also receives the prompts and tool material used in the conversation. The client's own training, Memory, retention, and sharing controls apply independently. Rewind's provider commitments do not override those controls. Check your plan, organization policy, and client settings before sharing private material. See [Rewind's privacy policy](https://rewind.church/legal/privacy), [AI explanation](https://rewind.church/legal/ai), and [trust information](https://rewind.church/trust).
 
 ## Handle limits and errors
