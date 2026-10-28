@@ -67,7 +67,7 @@ Each request uses your current church membership and permissions. OAuth connecti
 
 Retrieval, stored artifacts, illustrations, and source evidence use no metered Rewind synthesis. Searches can use query embeddings. Optional Rewind-written synthesis from `ask` or `trace_theme` uses your church's metered allowance only after your explicit confirmation. Credit amounts and balances may be unavailable. Your Claude subscription or API costs are separate.
 
-Draft-overlap checks may send up to three 500-character draft excerpts to OpenAI for embeddings on a cache miss. This path does not persist the draft text. Derived vectors use hashed cache keys with a configurable 24-hour default. Your chosen AI client's own training, Memory, retention, and sharing controls also apply to material you send to that client. Read the [data and cost reference](./docs/mcp-setup.md#understand-cost-and-data-use).
+Draft-overlap checks may send up to three 500-character draft excerpts to OpenAI for embeddings on a cache miss. This path does not persist the draft text. Derived vectors use hashed cache keys with a configurable 24-hour default. Your chosen AI client's own training, Memory, retention, and sharing controls also apply to material you send to that client. Rewind keeps a content-free record of each call for 90 days, without your question or the result; your church's administrators do not see it, but can see what a paid answer cost as Studio spend. Read the [data and cost reference](./docs/mcp-setup.md#understand-cost-and-data-use).
 
 ## Planning Center
 
